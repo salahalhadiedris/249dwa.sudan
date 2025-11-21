@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: 249dwa
+    env: python
+    plan: free
+    branch: main
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+    startCommand: "gunicorn dwa.wsgi:application"
