@@ -1,0 +1,842 @@
+
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة الأدوية - متوفر دواء</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --accent-orange: #f97316;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* الهيدر */
+        .header {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--accent-orange), #fb923c);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .register-pharmacy-btn {
+            background: var(--accent-orange) !important;
+            color: var(--white) !important;
+            font-weight: 700;
+            border-radius: 25px;
+            padding: 0.6rem 1.2rem !important;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .register-pharmacy-btn:hover {
+            background: #ea580c !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        }
+
+
+        /* قسم الفلترة */
+        .filter-section {
+            background: var(--white);
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .filter-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .filters-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.8rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: var(--white);
+            font-size: 1rem;
+            text-align: right;
+            cursor: pointer;
+            transition: border-color 0.3s;
+            min-width: 200px;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary-blue);
+            outline: none;
+        }
+
+        .filter-btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1.5rem;
+        }
+
+        .filter-btn:hover {
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
+        }
+
+        /* قسم الأدوية */
+        .drugs-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .drugs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .drug-item {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+
+        .drug-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--secondary-blue);
+        }
+
+        .drug-number {
+            background: var(--primary-blue);
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .drug-image {
+            width: 100px;
+            height: 160px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .drug-info {
+            flex: 1;
+            text-align: right;
+        }
+
+        .drug-name-arabic {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .drug-name-english {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .drug-strength {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            background: #f3f4f6;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .drug-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+
+        .order-btn {
+            background: #25d366;
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            margin-bottom: 0.5rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .order-btn:hover {
+            background: #128c7e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .details-btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+            width: 100%;
+            justify-content: center;
+        }
+
+        .details-btn:hover {
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+        }
+
+        .drug-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 200px;
+        }
+
+        /* القائمة المنسدلة للصيدليات */
+        .pharmacy-dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .pharmacy-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 100%;
+            box-shadow: var(--shadow-lg);
+            border-radius: 10px;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e5e7eb;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+        }
+
+        .pharmacy-dropdown-content.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pharmacy-item {
+            padding: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pharmacy-item:last-child {
+            border-bottom: none;
+        }
+
+        .pharmacy-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .pharmacy-item-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .pharmacy-item-info {
+            flex: 1;
+            text-align: right;
+        }
+
+        .pharmacy-item-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .pharmacy-item-location {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .pharmacy-item-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .pharmacy-item-rating .stars {
+            color: #fbbf24;
+        }
+
+        .pharmacy-item-rating .rating-text {
+            color: var(--text-light);
+        }
+
+        .pharmacy-item-action {
+            background: #25d366;
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .pharmacy-item-action:hover {
+            background: #128c7e;
+            transform: translateY(-1px);
+        }
+
+        .no-pharmacies {
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .no-pharmacies i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .order-btn i {
+            font-size: 1.2rem;
+        }
+
+        /* الفوتر */
+        .footer {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-copyright {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        /* التصميم المتجاوب */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .filter-section {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            .filters-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-select {
+                min-width: auto;
+            }
+
+            .drug-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .drug-info {
+                text-align: center;
+            }
+
+            .drug-image {
+                width: 120px;
+                height: 120px;
+            }
+
+            .drug-actions {
+                width: 100%;
+            }
+
+            .order-btn, .details-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .pharmacy-dropdown-content {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 90%;
+                max-width: 400px;
+                max-height: 70vh;
+            }
+
+            .pharmacy-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .pharmacy-item-image {
+                width: 60px;
+                height: 60px;
+            }
+
+            .pharmacy-item-info {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .drug-name-arabic {
+                font-size: 1.1rem;
+            }
+
+            .drug-name-english {
+                font-size: 0.9rem;
+            }
+
+            .drug-price {
+                font-size: 1.1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    
+
+
+    <section class="filter-section">
+        <h2 class="filter-title">فلتر الأدوية حسب الفئة</h2>
+        <form method="get" action="">
+            <div class="filters-container">
+              
+                <div class="filter-group">
+                    <label class="filter-label">نوع الدواء</label>
+                    <select class="filter-select" name="category" id="typeFilter">
+                        <option value="">جميع الأنواع</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if cat.id|stringformat:"s" == request.GET.category %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                   
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <!-- قسم الأدوية -->
+    <section class="drugs-section">
+        <h2 class="section-title">قائمة الأدوية المتوفرة</h2>
+        <div class="drugs-list" id="drugsList">
+            {% for product in products %}
+                <div class="drug-item">
+                    <div class="drug-number">{{ forloop.counter }}</div>
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="drug-image">
+                    {% endif %}
+                    <div class="drug-info">
+                        <div class="drug-name-arabic">{{ product.name }}</div>
+                        {% if product.name_english %}
+                            <div class="drug-name-english">{{ product.name_english }}</div>
+                        {% endif %}
+                        {% if product.category %}
+                            <div class="drug-category" style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">
+                                الفئة: {{ product.category.name }}
+                            </div>
+                        {% endif %}
+                        {% if product.strength %}
+                            <div class="drug-strength">{{ product.strength }}</div>
+                        {% endif %}
+                       
+                        {% if product.description %}
+                            <div style="color: var(--text-light); font-size: 0.9rem; margin-top: 0.5rem;">{{product.description| truncatewords:20 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="drug-actions">
+                        <div class="pharmacy-dropdown">
+                            <button class="order-btn" data-product-id="{{ product.id }}" onclick="togglePharmacyDropdown(this)">
+                                <i class="fab fa-whatsapp"></i>
+                                لطلب الشراء اضغط هنا
+                                <i class="fas fa-chevron-down" style="margin-right: 0.5rem;"></i>
+                            </button>
+                            <div class="pharmacy-dropdown-content" id="pharmacyDropdown{{ product.id }}">
+                                {% with selected_city=request.GET.city %}
+                                    {% with pharmacies=product.pharmacies.all %}
+                                        {% for pharmacy in pharmacies %}
+                                            {% if pharmacy.is_active %}
+                                                {% if not selected_city or pharmacy.city == selected_city %}
+                                                    <div class="pharmacy-item" data-city="{{ pharmacy.city }}">
+                                                        {% if pharmacy.image %}
+                                                            <img src="{{ pharmacy.image.url }}" alt="{{ pharmacy.name }}" class="pharmacy-item-image">
+                                                        {% endif %}
+                                                        <div class="pharmacy-item-info">
+                                                            <div class="pharmacy-item-name">{{ pharmacy.name }}</div>
+                                                            <div class="pharmacy-item-location">{{ pharmacy.location|default:pharmacy.city }}</div>
+                                                            {% if pharmacy.rating %}
+                                                                <div class="pharmacy-item-rating">
+                                                                    <span class="stars" data-rating="{{ pharmacy.rating }}">
+                                                                        {% for i in "12345" %}
+                                                                            <i class="far fa-star"></i>
+                                                                        {% endfor %}
+                                                                    </span>
+                                                                    <span class="rating-text">{{ pharmacy.rating }} ({{ pharmacy.rating_count }})</span>
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                        {% if pharmacy.whatsapp or pharmacy.phone %}
+                                                            <button class="pharmacy-item-action" 
+                                                                    data-product-id="{{ product.id }}"
+                                                                    data-pharmacy-id="{{ pharmacy.id }}"
+                                                                    data-whatsapp="{{ pharmacy.whatsapp|default:pharmacy.phone }}"
+                                                                    data-product-name="{{ product.name }}"
+                                                                    data-product-name-english="{{ product.name_english|default:'' }}"
+                                                                    data-product-strength="{{ product.strength|default:'' }}"
+                                                                    data-product-price="{{ product.price }}"
+                                                                    onclick="orderFromPharmacy(this)">
+                                                                <i class="fab fa-whatsapp"></i>
+                                                                تواصل الآن
+                                                            </button>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% empty %}
+                                            <div class="no-pharmacies">
+                                                <i class="fas fa-store-slash"></i>
+                                                <p>لا توجد صيدليات متوفرة لهذا الدواء</p>
+                                            </div>
+                                        {% endfor %}
+                                    {% endwith %}
+                                {% endwith %}
+                            </div>
+                        </div>
+                        <button class="details-btn" data-product-id="{{ product.id }}" onclick="viewDrugDetails(this)">
+                            <i class="fas fa-info-circle"></i>
+                            تفاصيل الدواء
+                        </button>
+                    </div>
+                </div>
+            {% empty %}
+                <div style="text-align: center; padding: 3rem; color: var(--text-light);">
+                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                    <h3>لا توجد أدوية متوفرة</h3>
+                    <p>جرب تغيير الفلاتر أو المدينة</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+
+    <script>
+        // دالة إظهار/إخفاء القائمة المنسدلة للصيدليات
+        function togglePharmacyDropdown(button) {
+            const productId = button.getAttribute('data-product-id');
+            const dropdown = document.getElementById(`pharmacyDropdown${productId}`);
+            const isVisible = dropdown.classList.contains('show');
+            
+            // إخفاء جميع القوائم المنسدلة الأخرى
+            document.querySelectorAll('.pharmacy-dropdown-content.show').forEach(dd => {
+                dd.classList.remove('show');
+            });
+            
+            if (!isVisible) {
+                dropdown.classList.add('show');
+                // تحديث النجوم عند فتح القائمة
+                updateStars(dropdown);
+            }
+        }
+
+        // دالة تحديث النجوم للتقييم
+        function updateStars(container) {
+            const starElements = container.querySelectorAll('.stars[data-rating]');
+            starElements.forEach(starContainer => {
+                const rating = parseFloat(starContainer.getAttribute('data-rating'));
+                const stars = starContainer.querySelectorAll('i');
+                const fullStars = Math.floor(rating);
+                const hasHalfStar = rating % 1 !== 0;
+                
+                stars.forEach((star, index) => {
+                    const starIndex = index + 1;
+                    if (starIndex <= fullStars) {
+                        star.className = 'fas fa-star';
+                    } else if (starIndex === fullStars + 1 && hasHalfStar) {
+                        star.className = 'fas fa-star-half-alt';
+                    } else {
+                        star.className = 'far fa-star';
+                    }
+                });
+            });
+        }
+
+        // دالة طلب الدواء من صيدلية محددة
+        function orderFromPharmacy(button) {
+            const whatsappNumber = button.getAttribute('data-whatsapp');
+            if (whatsappNumber) {
+                const productId = button.getAttribute('data-product-id');
+                const productName = button.getAttribute('data-product-name');
+                const productNameEnglish = button.getAttribute('data-product-name-english');
+                const productStrength = button.getAttribute('data-product-strength');
+                const productPrice = button.getAttribute('data-product-price');
+                
+                const cleanWhatsApp = whatsappNumber.replace(/[\s\-\(\)]/g, '');
+                const whatsappUrl = cleanWhatsApp.startsWith('+') ? cleanWhatsApp : `+${cleanWhatsApp}`;
+                
+                // إنشاء رسالة الطلب
+                let message = 'مرحباً، أود طلب الدواء التالي:\n\n';
+                message += `📦 ${productName}\n`;
+                if (productNameEnglish) {
+                    message += `(${productNameEnglish})\n`;
+                }
+                if (productStrength) {
+                    message += `التركيز: ${productStrength}\n`;
+                }
+                if (productPrice) {
+                    message += `السعر: ${productPrice} جنيه\n`;
+                }
+                message += '\nأرجو التواصل معي لتأكيد الطلب والتوصيل.';
+                
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/${whatsappUrl.replace('+', '')}?text=${encodedMessage}`, '_blank');
+                
+                const dropdown = document.getElementById(`pharmacyDropdown${productId}`);
+                if (dropdown) dropdown.classList.remove('show');
+            }
+        }
+
+        // دالة عرض تفاصيل الدواء
+        function viewDrugDetails(button) {
+            const productId = button.getAttribute('data-product-id');
+            window.location.href = `/product/${productId}/`;
+        }
+
+        // إخفاء القوائم المنسدلة عند النقر خارجها
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.pharmacy-dropdown')) {
+                document.querySelectorAll('.pharmacy-dropdown-content.show').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+{% endblock %}
+
+

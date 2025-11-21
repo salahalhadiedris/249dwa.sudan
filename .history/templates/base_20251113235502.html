@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+
+  {% include 'partials/_navbar.html' %}
+
+    {% block content %}
+    
+    {% endblock %}
+    {% include 'partials/_footer.html' %}
+    <!-- الفوتر -->
+    <footer class="bg-light text-center py-3 mt-5">
+        <p>© 2025 متوفر دواء | جميع الحقوق محفوظة</p>
+    </footer>
+
+    <!-- سكربتات -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

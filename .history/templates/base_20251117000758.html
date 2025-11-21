@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+
+  {% include 'partials/_navbar.html' %}
+  
+<script>
+    // إخفاء الهيدر عند التمرير لأسفل
+    document.addEventListener('DOMContentLoaded', function() {
+        let lastScrollTop = 0;
+        const header = document.getElementById('header');
+        const headerHeight = header.offsetHeight;
+
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > headerHeight) {
+                // التمرير لأسفل - إخفاء الهيدر
+                header.classList.add('hidden');
+            } else {
+                // التمرير لأعلى - إظهار الهيدر
+                header.classList.remove('hidden');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+
+        // قائمة الجوال
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+
+            // إغلاق القائمة عند النقر على رابط
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // إغلاق القائمة عند النقر خارجها
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.nav-links') && !event.target.closest('.mobile-menu-btn')) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
+    });
+</script>
+
+    {% block content %}
+    
+    {% endblock %}
+    {% include 'partials/_footer.html' %}
+
+    <!-- سكربتات -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

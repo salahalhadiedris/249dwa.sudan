@@ -1,0 +1,272 @@
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ product.name }}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f8f9fa;
+      color: #2c5530;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    img {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      border-radius: 15px;
+      margin-bottom: 10px;
+    }
+    
+    h2 {
+      color: #1e3a23;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    
+    td {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+      text-align: right;
+    }
+    
+    td:first-child {
+      font-weight: bold;
+      color: #1e3a23;
+      width: 40%;
+    }
+    
+    button {
+      background: #2c5530;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: 0.3s;
+      font-family: 'Cairo', sans-serif;
+    }
+    
+    button:hover {
+      background: #1e3a23;
+    }
+    
+    .back-btn {
+      background: #6b7280;
+      margin-top: 10px;
+    }
+    
+    .back-btn:hover {
+      background: #4b5563;
+    }
+    
+    /* قسم الصيدليات */
+    .pharmacies-container {
+      max-width: 500px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    
+    .pharmacies-title {
+      color: #1e3a23;
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    
+    .pharmacy-item {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      text-align: right;
+      border: 1px solid #e5e7eb;
+      transition: all 0.3s;
+    }
+    
+    .pharmacy-item:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    
+    .pharmacy-name {
+      font-weight: 700;
+      color: #1e3a23;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    
+    .pharmacy-city {
+      color: #6b7280;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+    
+    .pharmacy-contact {
+      background: #25d366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Cairo', sans-serif;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 5px;
+    }
+    
+    .pharmacy-contact:hover {
+      background: #128c7e;
+    }
+    
+    .no-pharmacies {
+      text-align: center;
+      color: #6b7280;
+      padding: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      
+      .container, .pharmacies-container {
+        max-width: 100%;
+        padding: 15px;
+      }
+      
+      img {
+        width: 150px;
+        height: 150px;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  {% if product.image %}
+    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+  {% else %}
+    <div style="width: 180px; height: 180px; background: #f3f4f6; border-radius: 15px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; color: #9ca3af;">
+      <i class="fas fa-pills" style="font-size: 3rem;"></i>
+    </div>
+  {% endif %}
+  <h2>{{ product.name }}</h2>
+
+  <table>
+    {% if product.name_english %}
+    <tr><td>الاسم العلمي</td><td>{{ product.name_english }}</td></tr>
+    {% endif %}
+    {% if product.description %}
+    <tr><td>الاستخدام</td><td>{{ product.description|truncatewords:30 }}</td></tr>
+    {% endif %}
+    {% if product.strength %}
+    <tr><td>التراكيز</td><td>{{ product.strength }}</td></tr>
+    {% endif %}
+    {% if product.category %}
+    <tr><td>الفئة</td><td>{{ product.category.name }}</td></tr>
+    {% endif %}
+    {% if product.price %}
+    <tr><td>السعر</td><td>{{ product.price }} جنيه</td></tr>
+    {% endif %}
+  </table>
+
+  <button id="whatsappBtn" onclick="openWhatsApp()">💬 طلب الدواء عبر واتساب</button>
+  <button class="back-btn" onclick="goBack()">← العودة لقائمة الأدوية</button>
+</div>
+
+<!-- قسم الصيدليات -->
+{% if product.pharmacies.all %}
+<div class="pharmacies-container">
+  <h3 class="pharmacies-title">الصيدليات المتوفر فيها الدواء</h3>
+  {% for pharmacy in product.pharmacies.all %}
+    <div class="pharmacy-item">
+      <div class="pharmacy-name">{{ pharmacy.name }}</div>
+      <div class="pharmacy-city">{{ pharmacy.city }}</div>
+      {% if pharmacy.whatsapp or pharmacy.phone %}
+        <a href="https://wa.me/{{ pharmacy.whatsapp|default:pharmacy.phone|slice:'1:' }}?text=مرحباً، أود الاستفسار عن الدواء: {{ product.name }}" 
+           target="_blank" 
+           class="pharmacy-contact">
+          <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+        </a>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<script>
+function openWhatsApp() {
+  const productName = '{{ product.name }}';
+  const productEnglish = '{{ product.name_english|default:"" }}';
+  const productStrength = '{{ product.strength|default:"" }}';
+  const productPrice = '{{ product.price|default:"" }}';
+  
+  let message = 'مرحباً، أود طلب الدواء التالي:\n\n';
+  message += `${productName}\n`;
+  if (productEnglish) {
+    message += `${productEnglish}\n`;
+  }
+  if (productStrength) {
+    message += `التركيز: ${productStrength}\n`;
+  }
+  if (productPrice) {
+    message += `السعر: ${productPrice} جنيه\n`;
+  }
+  message += '\nأرجو التواصل معي لتأكيد الطلب والتوصيل.';
+  
+  window.open(`https://wa.me/201158968075?text=${encodeURIComponent(message)}`, '_blank');
+}
+
+function goBack() {
+  window.history.back();
+}
+</script>
+
+</body>
+</html>
+{% endblock %}

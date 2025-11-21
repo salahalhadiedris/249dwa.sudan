@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<h1>الvjمنتجات</h1>
+
+<form method="get">
+  <select name="category">
+    <option value="">اختر الفئة</option>
+    {% for cat in categories %}
+      <option value="{{ cat.id }}" {% if cat.id|stringformat:"s" == request.GET.category %}selected{% endif %}>{{ cat.name }}</option>
+    {% endfor %}
+  </select>
+
+  <select name="city">
+    <option value="">اختر المدينة</option>
+    {% for c in cities %}
+      <option value="{{ c }}" {% if c == request.GET.city %}selected{% endif %}>{{ c }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">فلتر</button>
+</form>
+
+<ul>
+{% for product in products %}
+  <li>
+    <strong>{{ product.name }}</strong>  
+    ({{ product.category.name }} - {{ product.city }} - {{ product.pharmacy.name }})
+  </li>
+{% empty %}
+  <li>لا توجد منتجات مطابقة</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
