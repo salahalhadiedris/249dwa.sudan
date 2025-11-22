@@ -1,0 +1,23 @@
+# أنشئ .gitignore تلقائياً للبايثون
+curl https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore -o .gitignore
+# Python cache
+_pycache_/
+*.pyc
+
+# Virtual Environment
+venv/
+env/
+
+# Environment variables
+.env
+*.env
+.env.*
+
+# Django stuff
+media/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
