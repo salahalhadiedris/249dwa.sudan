@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -29,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'True'
 
-ALLOWED_HOSTS = ['*', 'railway.app', '249dwa-production.up.railway.app']
+ALLOWED_HOSTS = ['*', 'railway.app', 'localhost','127.0.0.1']
 
 
 # Application definition
@@ -81,15 +82,19 @@ WSGI_APPLICATION = 'dwa.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
+if 'DATABASE_URL' in os.environ:
+  DATABASES = {
+      'default': dj_database_url.config(
+          default=os.getenv('DATABASE_URL'),
+            conn_max_age=600,
+            ssl_require=True
+      )
+    }
+else:
+  DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('PGDATABASE'),
-        'USER': os.environ.get('PGUSER'),
-        'PASSWORD': os.environ.get('PGPASSWORD'),
-        'HOST': os.environ.get('PGHOST'),
-        'PORT': os.environ.get('PGPORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
