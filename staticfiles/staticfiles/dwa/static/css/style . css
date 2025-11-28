@@ -1,0 +1,137 @@
+/* تنسيق كروت الصيدليات - محدث */
+.pharmacy-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.pharmacy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,119,181,0.15);
+}
+
+.pharmacy-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 3px solid #f0f0f0;
+}
+
+.pharmacy-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pharmacy-name {
+    color: #0077b5;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.pharmacy-rating {
+    background: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.pharmacy-location {
+    color: #666;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pharmacy-contacts {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.contact-btn {
+    flex: 1;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.phone-btn {
+    background: #0077b5;
+    color: white;
+}
+
+.whatsapp-btn {
+    background: #25D366;
+    color: white;
+}
+
+.contact-btn:hover {
+    opacity: 0.9;
+}
+
+/* تنسيق الصيدليات المميزة */
+.featured-pharmacy {
+    border: 2px solid #0077b5;
+    background: linear-gradient(135deg, #f8fbff, #ffffff);
+}
+
+.featured-badge {
+    background: #0077b5;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+/* شبكة الصيدليات */
+.pharmacies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* تنسيق صفحة الأدوية مع الصيدليات */
+.drug-pharmacies {
+    margin-top: 20px;
+}
+
+.drug-contacts {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.contact-link {
+    background: #0077b5;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.contact-link:hover {
+    background: #005582;
+}

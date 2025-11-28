@@ -1,0 +1,1138 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متوفر دواء - دليل الأدوية الشامل</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --accent-orange: #f97316;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* الهيدر */
+        .header {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 0.75rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s ease;
+        }
+
+        .header.hidden {
+            transform: translateY(-100%);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 800;
+            white-space: nowrap;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+        
+        .nav-link.products-link {
+            background: #ea580c !important;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .nav-link.products-link:hover {
+            background: #c2410c !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.4);
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: background 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .register-pharmacy-btn {
+            background: var(--accent-orange) !important;
+            color: var(--white) !important;
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 0.5rem 1rem !important;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .register-pharmacy-btn:hover {
+            background: #ea580c !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        }
+
+
+        .nav-link i {
+            font-size: 0.8rem;
+        }
+
+        /* زر القائمة المنسدلة للهواتف */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* قسم البحث الرئيسي */
+        .search-hero {
+            background: linear-gradient(rgba(30, 58, 138, 0.8), rgba(59, 130, 246, 0.8)), 
+                        url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 3rem 1rem;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+            margin-top: 70px; /* تعويض عن الهيدر الثابت */
+        }
+
+        .search-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="medical" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23medical)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .search-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: -0.02em;
+        }
+
+        .search-container {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .search-box {
+            display: flex;
+            background: var(--white);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            text-align: right;
+            background: transparent;
+        }
+
+        .search-btn {
+            background: var(--accent-orange);
+            color: var(--white);
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #ea580c;
+        }
+
+        .search-suggestions {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-top: 0.5rem;
+            display: none;
+            z-index: 99999;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+            animation: fadeInDown 0.3s ease-out;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .suggestion-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .suggestion-item:hover {
+            background: #f3f4f6;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .suggestion-info {
+            flex: 1;
+            text-align: right;
+        }
+
+        .suggestion-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .suggestion-category {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .suggestion-price {
+            font-weight: 600;
+            color: var(--accent-orange);
+        }
+
+        /* أزرار التنقل السفلية */
+        .bottom-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .bottom-nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            min-width: 180px;
+            justify-content: center;
+        }
+
+        .bottom-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .bottom-nav-btn i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .bottom-nav-btn:hover i {
+            transform: scale(1.1);
+        }
+
+        .cosmetics-btn {
+            background: linear-gradient(45deg, rgba(236, 72, 153, 0.8), rgba(219, 39, 119, 0.8));
+            border-color: rgba(236, 72, 153, 0.5);
+        }
+
+        .cosmetics-btn:hover {
+            background: linear-gradient(45deg, rgba(236, 72, 153, 0.9), rgba(219, 39, 119, 0.9));
+        }
+
+        .pharmacies-btn {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.8), rgba(5, 150, 105, 0.8));
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .pharmacies-btn:hover {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* قسم تصنيفات الأدوية */
+        .drug-categories {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            letter-spacing: -0.02em;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .category-card {
+            background: var(--white);
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .category-card:nth-child(1) { animation-delay: 0.1s; }
+        .category-card:nth-child(2) { animation-delay: 0.2s; }
+        .category-card:nth-child(3) { animation-delay: 0.3s; }
+        .category-card:nth-child(4) { animation-delay: 0.4s; }
+        .category-card:nth-child(5) { animation-delay: 0.5s; }
+        .category-card:nth-child(6) { animation-delay: 0.6s; }
+        .category-card:nth-child(7) { animation-delay: 0.7s; }
+        .category-card:nth-child(8) { animation-delay: 0.8s; }
+        .category-card:nth-child(9) { animation-delay: 0.9s; }
+
+        .category-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+            border-color: var(--secondary-blue);
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--secondary-blue), var(--primary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: var(--white);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .category-card:hover .category-icon {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .category-name {
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .category-views {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .views-icon {
+            color: var(--accent-orange);
+        }
+
+        /* الفوتر */
+        .footer {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .footer.hidden {
+            transform: translateY(100%);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-copyright {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        /* قسم الإعلانات المتحركة */
+        .ads-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .ads-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .ads-carousel {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .ads-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .ads-slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+        
+        .ads-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .ads-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .ads-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+        
+        .ads-dot.active {
+            background: var(--white);
+            transform: scale(1.3);
+        }
+        
+        .ads-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #1e3a8a;
+            z-index: 10;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .ads-arrow:hover {
+            background: var(--white);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .ads-arrow.prev {
+            right: 20px;
+        }
+        
+        .ads-arrow.next {
+            left: 20px;
+        }
+
+        /* التصميم المتجاوب */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .nav-link {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .register-pharmacy-btn {
+                padding: 0.4rem 0.8rem !important;
+                font-size: 0.75rem;
+            }
+
+            .search-title {
+                font-size: 2rem;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .category-card {
+                padding: 1rem;
+            }
+
+            .category-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .footer-links {
+                gap: 1rem;
+            }
+
+            .bottom-nav {
+                gap: 1rem;
+                margin-top: 1.5rem;
+            }
+
+            .bottom-nav-btn {
+                padding: 0.8rem 1.5rem;
+                min-width: 150px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-container {
+                justify-content: space-between;
+            }
+
+            .logo-text {
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--primary-blue);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--shadow-lg);
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-link {
+                padding: 0.8rem 1rem;
+                justify-content: center;
+                font-size: 0.9rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .search-hero {
+                padding: 2rem 1rem;
+                margin-top: 60px;
+            }
+
+            .search-title {
+                font-size: 1.5rem;
+            }
+
+            .search-hero-content {
+                padding: 1.5rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .category-name {
+                font-size: 0.9rem;
+            }
+
+            .bottom-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .bottom-nav-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .logo-text {
+                font-size: 0.9rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- قسم البحث الرئيسي -->
+    <section class="search-hero">
+        <div class="search-hero-content">
+            <h1 class="search-title">Search</h1>
+            <div class="search-container">
+                <form method="get" action="{% url 'products' %} " id="searchForm">
+                    <div class="search-box">
+                        <input type="text" class="search-input" id="mainSearch" name="search" placeholder="ابحث عن دواء..." oninput="handleSearch()" onfocus="showSuggestions()" onblur="hideSuggestions()">
+                        <button type="button" class="search-btn" onclick="performSearch()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="search-suggestions" id="searchSuggestions"></div>
+                </form>
+            </div>
+            
+            <!-- أزرار التنقل السفلية -->
+            <div class="bottom-nav">
+                <a href="{% url 'products' %}" class="bottom-nav-btn pharmacies-btn">
+                    <i class="fas fa-pills"></i>
+                    الأدوية
+                </a>
+                <a href="{% url 'pharmacies' %}" class="bottom-nav-btn pharmacies-btn">
+                    <i class="fas fa-store"></i>
+                    الصيدليات
+                </a>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-content">
+        <!-- قسم تصنيفات الأدوية -->
+        <!-- جميع الفئات تأتي من تطبيق الفئات -->
+        <section class="drug-categories">
+            <h2 class="section-title">دليل إستعمالات الادوية الشامل</h2>
+            <div class="categories-grid" id="categoriesGrid">
+                {% for category in categories %}
+                    <div class="category-card" data-category-id="{{ category.id }}" onclick="filterByCategory(this.getAttribute('data-category-id'))">
+                        <div class="category-icon" {% if category.color %}style="background: linear-gradient(45deg, {{ category.color }}, {{ category.color }}dd);"{% endif %}>
+                            {% if category.icon %}
+                                <i class="{{ category.icon }}"></i>
+                            {% else %}
+                                <i class="fas fa-pills"></i>
+                            {% endif %}
+                        </div>
+                        <div class="category-name">{{ category.name }}</div>
+                        <div class="category-views">
+                            <i class="fas fa-eye views-icon"></i>
+                            {{ category.products.count|default:0 }}
+                        </div>
+                    </div>
+                {% empty %}
+                    <!-- Default categories will be shown if no categories from admin -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const defaultCategories = [
+                                { id: 1, name: "ادوية البرد", icon: "fas fa-head-side-cough", views: 107801, color: "#3b82f6" },
+                                { id: 2, name: "ادوية القولون", icon: "fas fa-stomach", views: 127041, color: "#10b981" },
+                                { id: 3, name: "فيتامينات", icon: "fas fa-capsules", views: 161631, color: "#f59e0b" },
+                                { id: 4, name: "للتأخير للرجال", icon: "fas fa-clock", views: 86319, color: "#8b5cf6" },
+                                { id: 5, name: "مقوي للرجال", icon: "fas fa-dumbbell", views: 106633, color: "#ef4444" },
+                                { id: 6, name: "زيادة التركيز والانتباه", icon: "fas fa-brain", views: 107265, color: "#06b6d4" },
+                                { id: 7, name: "الانتفاخ والغازات", icon: "fas fa-wind", views: 69626, color: "#84cc16" },
+                                { id: 8, name: "أدوية الضغط", icon: "fas fa-heartbeat", views: 89432, color: "#f97316" },
+                                { id: 9, name: "أدوية السكري", icon: "fas fa-syringe", views: 76543, color: "#ec4899" }
+                            ];
+                            
+                            const grid = document.getElementById('categoriesGrid');
+                            if (grid && grid.children.length === 0) {
+                                defaultCategories.forEach(cat => {
+                                    const card = document.createElement('div');
+                                    card.className = 'category-card';
+                                    card.setAttribute('data-category-id', cat.id);
+                                    card.onclick = () => filterByCategory(cat.id);
+                                    card.innerHTML = `
+                                        <div class="category-icon" style="background: linear-gradient(45deg, ${cat.color}, ${cat.color}dd);">
+                                            <i class="${cat.icon}"></i>
+                                        </div>
+                                        <div class="category-name">${cat.name}</div>
+                                        <div class="category-views">
+                                            <i class="fas fa-eye views-icon"></i>
+                                            ${cat.views}
+                                        </div>
+                                    `;
+                                    grid.appendChild(card);
+                                });
+                            }
+                        });
+                    </script>
+                    <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-light);">
+                        <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                        <p>جاري تحميل الفئات...</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+        
+        <!-- قسم الإعلانات المتحركة -->
+        <section class="ads-section" id="adsSection">
+            <div class="ads-carousel" id="adsCarousel">
+                <div class="ads-slide active" style="background-image: url('https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=1200');"></div>
+                <div class="ads-slide" style="background-image: url('https://images.unsplash.com/photo-1550572017-edd951b55104?w=1200');"></div>
+                <div class="ads-slide" style="background-image: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=1200');"></div>
+                <div class="ads-slide" style="background-image: url('https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=1200');"></div>
+                <div class="ads-slide" style="background-image: url('https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=1200');"></div>
+                
+                <button class="ads-arrow prev" onclick="changeAdSlide(-1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="ads-arrow next" onclick="changeAdSlide(1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="ads-nav" id="adsNav"></div>
+            </div>
+        </section>
+    </main>
+
+
+<script>
+    // دالة البحث التلقائي - جلب البيانات من Django API
+    let searchTimeout;
+
+    function handleSearch() {
+        clearTimeout(searchTimeout);
+        const searchTerm = document.getElementById('mainSearch').value.trim();
+        const suggestionsDiv = document.getElementById('searchSuggestions');
+        
+        if (searchTerm.length < 2) {
+            suggestionsDiv.style.display = 'none';
+            return;
+        }
+
+        // تأخير البحث قليلاً لتقليل الطلبات
+        searchTimeout = setTimeout(() => {
+            fetch(`/products/search/?q=${encodeURIComponent(searchTerm)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const products = data.products || [];
+                    
+                    if (products.length > 0) {
+                        suggestionsDiv.innerHTML = '';
+                        products.forEach(product => {
+                            const suggestionItem = document.createElement('div');
+                            suggestionItem.className = 'suggestion-item';
+                            suggestionItem.onclick = () => selectProduct(product);
+                            
+                            const productImage = product.image ? product.image : '/static/images/default-product.jpg';
+
+                            suggestionItem.innerHTML = `
+                                ${product.image ? `<img src="${product.image}" alt="${product.name}" class="suggestion-image" onerror="this.style.display='none';">` : ''}
+                                <div class="suggestion-info">
+                                    <div class="suggestion-name">${product.name}</div>
+                                    <div class="suggestion-category">
+                                        ${product.name_english ? product.name_english + ' - ' : ''}${product.category || ''}
+                                    </div>
+                                </div>
+                                <div class="suggestion-price">تفاصيل</div>
+                            `;
+                            
+                            suggestionsDiv.appendChild(suggestionItem);
+                        });
+                        
+                        // تحديد موضع الاقتراحات بشكل ديناميكي
+                        const searchBox = document.querySelector('.search-box');
+                        if (searchBox) {
+                            const searchBoxRect = searchBox.getBoundingClientRect();
+                            suggestionsDiv.style.top = (searchBoxRect.bottom + window.scrollY + 5) + 'px';
+                        }
+                        suggestionsDiv.style.display = 'block';
+                    } else {
+                        suggestionsDiv.innerHTML = '<div class="suggestion-item" style="text-align: center; color: var(--text-light);">لا توجد نتائج</div>';
+                        const searchBox = document.querySelector('.search-box');
+                        if (searchBox) {
+                            const searchBoxRect = searchBox.getBoundingClientRect();
+                            suggestionsDiv.style.top = (searchBoxRect.bottom + window.scrollY + 5) + 'px';
+                        }
+                        suggestionsDiv.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching search results:', error);
+                    suggestionsDiv.style.display = 'none';
+                });
+        }, 300);
+    }
+
+    // اختيار منتج من الاقتراحات
+    function selectProduct(product) {
+        document.getElementById('mainSearch').value = product.name;
+        document.getElementById('searchSuggestions').style.display = 'none';
+        window.location.href = `/product/${product.id}/`;
+    }
+
+    // إظهار الاقتراحات
+    function showSuggestions() {
+        const searchTerm = document.getElementById('mainSearch').value.trim();
+        if (searchTerm.length >= 2) {
+            handleSearch();
+        }
+    }
+
+    // إخفاء الاقتراحات
+    function hideSuggestions() {
+        setTimeout(() => {
+            document.getElementById('searchSuggestions').style.display = 'none';
+        }, 200);
+    }
+
+    // دالة البحث الرئيسية – الآن تذهب مباشرة لتفاصيل المنتج
+    function performSearch() {
+        const searchTerm = document.getElementById('mainSearch').value.trim();
+
+        if (searchTerm.length < 2) return;
+
+        fetch(`/products/search/?q=${encodeURIComponent(searchTerm)}`)
+            .then(response => response.json())
+            .then(data => {
+                const products = data.products || [];
+
+                if (products.length > 0) {
+                    window.location.href = `/product/${products[0].id}/`;
+                } else {
+                    alert("مافي منتج بالاسم دا.");
+                }
+            });
+    }
+
+            // دالة فلترة الأدوية حسب التصنيف
+    function filterByCategory(categoryId) {
+            // التوجيه لصفحة الأدوية مع فلتر الفئة
+            const url = '{% url "products" %}?category=' + categoryId;
+            window.location.href = url;
+        }
+        
+    // إخفاء/إظهار الهيدر عند التمرير
+    let lastScrollTop = 0;
+    function handleHeaderVisibility() {
+        const header = document.getElementById('header');
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+            header.classList.add('hidden');
+        } else {
+            header.classList.remove('hidden');
+        }
+        
+        lastScrollTop = scrollTop;
+    }
+
+    // قائمة الهاتف
+    function toggleMobileMenu() {
+        const navLinks = document.getElementById('navLinks');
+        navLinks.classList.toggle('active');
+    }
+
+    // إدارة الإعلانات المتحركة
+    let currentAdSlide = 0;
+    const adSlides = document.querySelectorAll('.ads-slide');
+    const adDots = [];
+    let adInterval;
+
+    function initAds() {
+        const adsNav = document.getElementById('adsNav');
+        adSlides.forEach((slide, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'ads-dot' + (index === 0 ? ' active' : '');
+            dot.onclick = () => goToAdSlide(index);
+            adsNav.appendChild(dot);
+            adDots.push(dot);
+        });
+        
+        startAdCarousel();
+        
+        // إظهار قسم الإعلانات عند التمرير
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        const adsSection = document.getElementById('adsSection');
+        if (adsSection) observer.observe(adsSection);
+    }
+
+    function goToAdSlide(index) {
+        adSlides[currentAdSlide].classList.remove('active');
+        adDots[currentAdSlide].classList.remove('active');
+        currentAdSlide = index;
+        adSlides[currentAdSlide].classList.add('active');
+        adDots[currentAdSlide].classList.add('active');
+    }
+
+    function changeAdSlide(direction) {
+        const newIndex = (currentAdSlide + direction + adSlides.length) % adSlides.length;
+        goToAdSlide(newIndex);
+        resetAdCarousel();
+    }
+
+    function startAdCarousel() {
+        adInterval = setInterval(() => {
+            changeAdSlide(1);
+        }, 4000);
+    }
+
+    function resetAdCarousel() {
+        clearInterval(adInterval);
+        startAdCarousel();
+    }
+
+    // Scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // تهيئة الصفحة
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('scroll', handleHeaderVisibility);
+
+        document.getElementById('mainSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        }
+        
+        // تهيئة الإعلانات
+        initAds();
+        
+        // إضافة scroll animations للعناصر
+        document.querySelectorAll('.category-card, .drug-categories').forEach(el => {
+            scrollObserver.observe(el);
+        });
+    });
+</script>
+
+</body>
+</html>
+{% endblock %}

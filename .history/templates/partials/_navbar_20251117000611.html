@@ -1,0 +1,208 @@
+{% load static %}
+<header class="header" id="header">
+    <div class="header-container">
+        <div class="logo-section">
+            <div class="logo-text">متوفر دواء</div>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav class="nav-links" id="navLinks">
+            <a href="{% url 'home' %}" class="nav-link">
+                <i class="fas fa-home"></i>
+                الرئيسية
+            </a>
+            <a href="{% url 'products' %}" class="nav-link">
+                <i class="fas fa-pills"></i>
+                الأدوية
+            </a>
+            <a href="{% url 'pharmacies' %}" class="nav-link">
+                <i class="fas fa-store"></i>
+                الصيدليات
+            </a>
+            <a href="{% url 'register-pharmacy' %}" class="nav-link register-pharmacy-btn">
+                <i class="fas fa-plus-circle"></i>
+                سجل صيدليتك
+            </a>
+        </nav>
+    </div>
+</header>
+
+<style>
+    .header {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        background: linear-gradient(135deg, #4a90e2, #357abd);
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        z-index: 1000;
+        transition: transform 0.3s ease;
+    }
+
+    .header.hidden {
+        transform: translateY(-100%);
+    }
+
+    .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        height: 70px;
+    }
+
+    .logo-section {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-text {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .register-pharmacy-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid white;
+    }
+
+    .register-pharmacy-btn:hover {
+        background: white;
+        color: #4a90e2;
+    }
+
+    /* تحسينات للجوال */
+    @media (max-width: 768px) {
+        .header-container {
+            height: 60px;
+            padding: 0 15px;
+        }
+
+        .mobile-menu-btn {
+            display: block;
+        }
+
+        .nav-links {
+            position: fixed;
+            top: 60px;
+            right: -100%;
+            width: 80%;
+            height: calc(100vh - 60px);
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 40px 20px;
+            gap: 15px;
+            transition: right 0.3s ease;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-links.active {
+            right: 0;
+        }
+
+        .nav-link {
+            width: 100%;
+            justify-content: flex-start;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .header-container {
+            padding: 0 10px;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+        }
+    }
+</style>
+
+<script>
+    // إخفاء الهيدر عند التمرير لأسفل
+    document.addEventListener('DOMContentLoaded', function() {
+        let lastScrollTop = 0;
+        const header = document.getElementById('header');
+        const headerHeight = header.offsetHeight;
+
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > headerHeight) {
+                // التمرير لأسفل - إخفاء الهيدر
+                header.classList.add('hidden');
+            } else {
+                // التمرير لأعلى - إظهار الهيدر
+                header.classList.remove('hidden');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+
+        // قائمة الجوال
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+
+            // إغلاق القائمة عند النقر على رابط
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // إغلاق القائمة عند النقر خارجها
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.nav-links') && !event.target.closest('.mobile-menu-btn')) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
+    });
+</script>

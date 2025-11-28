@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ product.name }}</title>
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #28a745;
+      --text-color: #2c3e50;
+      --light-gray: #f8f9fa;
+      --border-color: #e0e0e0;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body { 
+      font-family: 'Arial', sans-serif; 
+      background: #f7f7f7; 
+      line-height: 1.6;
+      color: var(--text-color);
+    }
+    
+    .container { 
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 20px 0;
+      padding: 12px 20px;
+      background: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s;
+      font-size: 0.9rem;
+    }
+    
+    .back-link:hover {
+      background: #357abd;
+      transform: translateY(-2px);
+    }
+    
+    .product-header {
+      background: white;
+      padding: 25px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    
+    .product-image-container {
+      max-width: 400px;
+      height: 300px;
+      margin: 0 auto 25px;
+      background: linear-gradient(135deg, #fff, #f8f9fa);
+      padding: 15px;
+      border-radius: 12px;
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .product-image-container img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    .product-title {
+      color: var(--text-color);
+      margin-bottom: 12px;
+      font-size: 1.6rem;
+      line-height: 1.3;
+    }
+    
+    .product-category {
+      display: inline-block;
+      padding: 8px 18px;
+      background: #e8f4ff;
+      color: var(--primary-color);
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+    
+    .product-details {
+      background: white;
+      padding: 25px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+    }
+    
+    .section-title {
+      color: var(--text-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+    }
+    
+    .description {
+      color: #555;
+      font-size: 1rem;
+      line-height: 1.8;
+      text-align: justify;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+    
+    .whatsapp-btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 15px 25px;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+    }
+    
+    .pharmacies-section {
+      background: white;
+      padding: 25px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .pharmacy-list {
+      display: grid;
+      gap: 12px;
+    }
+    
+    .pharmacy-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      transition: all 0.3s;
+      background: var(--light-gray);
+    }
+    
+    .pharmacy-item:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+    
+    .pharmacy-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex: 1;
+    }
+    
+    .pharmacy-image {
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: white;
+      border: 2px solid var(--border-color);
+    }
+    
+    .pharmacy-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .pharmacy-details {
+      flex: 1;
+    }
+    
+    .pharmacy-name {
+      font-weight: bold;
+      color: var(--text-color);
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+    
+    .pharmacy-location {
+      color: #666;
+      font-size: 0.85rem;
+    }
+    
+    .contact-buttons {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    
+    .phone-btn {
+      padding: 10px 18px;
+      background: var(--secondary-color);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    
+    .phone-btn:hover {
+      background: #218838;
+    }
+    
+    .whatsapp-pharmacy-btn {
+      padding: 10px 18px;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    
+    .whatsapp-pharmacy-btn:hover {
+      background: #128C7E;
+    }
+    
+    .similar-products {
+      margin-top: 35px;
+    }
+    
+    .suggestions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .suggestion {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s;
+      border: 1px solid var(--border-color);
+    }
+    
+    .suggestion:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+    
+    .suggestion-image {
+      width: 100%;
+      height: 140px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: var(--light-gray);
+    }
+    
+    .suggestion-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .suggestion-title {
+      font-size: 0.9rem;
+      color: var(--text-color);
+      margin-bottom: 10px;
+      line-height: 1.3;
+      height: 2.6em;
+      overflow: hidden;
+      display: -webkit-box;
+    }
+    
+    .detail-btn {
+      display: inline-block;
+      padding: 8px 15px;
+      background: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      transition: background 0.3s;
+    }
+    
+    .detail-btn:hover {
+      background: #357abd;
+    }
+    
+    /* تحسينات للجوال */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 10px;
+      }
+      
+      .product-header {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+      }
+      
+      .product-image-container {
+        height: 250px;
+        max-width: 100%;
+        margin-bottom: 20px;
+      }
+      
+      .product-title {
+        font-size: 1.4rem;
+      }
+      
+      .product-details {
+        padding: 20px 15px;
+      }
+      
+      .pharmacies-section {
+        padding: 20px 15px;
+      }
+      
+      .pharmacy-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+      }
+      
+      .pharmacy-info {
+        gap: 12px;
+      }
+      
+      .pharmacy-image {
+        width: 60px;
+        height: 60px;
+      }
+      
+      .contact-buttons {
+        justify-content: center;
+        width: 100%;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .whatsapp-btn {
+        min-width: auto;
+      }
+      
+      .suggestions {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      
+      .suggestion-image {
+        height: 120px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .product-title {
+        font-size: 1.2rem;
+      }
+      
+      .section-title {
+        font-size: 1.1rem;
+      }
+      
+      .pharmacy-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+      
+      .pharmacy-image {
+        align-self: center;
+      }
+      
+      .suggestions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .contact-buttons {
+        flex-direction: column;
+      }
+      
+      .phone-btn,
+      .whatsapp-pharmacy-btn {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{% url 'products' %}" class="back-link">
+      <span>←</span>
+      الرجوع إلى المنتجات
+    </a>
+    
+    <!-- رأس المنتج -->
+    <div class="product-header">
+      <div class="product-image-container">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+          <div style="color:#777; padding:50px;">لا توجد صورة</div>
+        {% endif %}
+      </div>
+      <h1 class="product-title">{{ product.name }}</h1>
+      <div class="product-category">{{ product.category.name }}</div>
+    </div>
+    
+    <!-- تفاصيل المنتج -->
+    <div class="product-details">
+      <h2 class="section-title">وصف المنتج</h2>
+      <div class="description">
+        {{ product.description|linebreaks }}
+      </div>
+      
+      <!-- زر الطلب عبر الواتساب -->
+      <div class="action-buttons">
+        <a href="https://wa.me/966{{ product.pharmacies.first.phone|cut:'+'|cut:' ' }}?text=مرحباً، أريد طلب منتج: {{ product.name }}" 
+           class="whatsapp-btn" 
+           target="_blank">
+          📱 طلب عبر الواتساب
+        </a>
+      </div>
+    </div>
+    
+    <!-- الصيدليات المتاحة -->
+    <div class="pharmacies-section">
+      <h2 class="section-title">الصيدليات المتوفر فيها الدواء</h2>
+      <div class="pharmacy-list">
+        {% for pharmacy in product.pharmacies.all %}
+          <div class="pharmacy-item">
+            <div class="pharmacy-info">
+              <div class="pharmacy-image">
+                {% if pharmacy.image %}
+                  <img src="{{ pharmacy.image.url }}" alt="{{ pharmacy.name }}">
+                {% else %}
+                  <div style="background:#eee; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#777; font-size:0.7rem;">
+                    صورة
+                  </div>
+                {% endif %}
+              </div>
+              <div class="pharmacy-details">
+                <div class="pharmacy-name">{{ pharmacy.name }}</div>
+                <div class="pharmacy-location">{{ pharmacy.city }}</div>
+              </div>
+            </div>
+            <div class="contact-buttons">
+              <a href="tel:0{{ pharmacy.phone|cut:'+'|cut:' '|cut:'966' }}" class="phone-btn">
+                📞 اتصل
+              </a>
+              <a href="https://wa.me/966{{ pharmacy.phone|cut:'+'|cut:' '|cut:'966' }}?text=مرحباً، أستفسر عن منتج: {{ product.name }}" 
+                 class="whatsapp-pharmacy-btn" 
+                 target="_blank">
+                📱 واتساب
+              </a>
+            </div>
+          </div>
+        {% empty %}
+          <p style="text-align:center; color:#666; padding:20px;">لا توجد صيدليات متاحة لهذا المنتج حالياً</p>
+        {% endfor %}
+      </div>
+    </div>
+    
+    <!-- منتجات مشابهة -->
+    <div class="similar-products">
+      <h2 class="section-title">منتجات مشابهة</h2>
+      <div class="suggestions">
+        {% for p in similar_products %}
+          <div class="suggestion">
+            <div class="suggestion-image">
+              {% if p.image %}
+                <img src="{{ p.image.url }}" alt="{{ p.name }}">
+              {% else %}
+                <div style="background:#f0f0f0; height:100%; display:flex; align-items:center; justify-content:center; color:#777; font-size:0.8rem;">
+                  لا توجد صورة
+                </div>
+              {% endif %}
+            </div>
+            <div class="suggestion-title">{{ p.name }}</div>
+            <a href="{% url 'product_detail' product_id=product.id %}" class="detail-btn">تفاصيل</a>
+          </div>
+        {% empty %}
+          <p style="text-align:center; color:#666; width:100%;">لا توجد منتجات مشابهة</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // دالة لتنظيف أرقام الهواتف
+    function cleanPhoneNumber(phone) {
+      return phone.replace(/[+\s]/g, '').replace(/^966/, '');
+    }
+    
+    // تحديث روابط الواتساب عند التحميل
+    document.addEventListener('DOMContentLoaded', function() {
+      // تحديث زر الطلب الرئيسي
+      const mainWhatsappBtn = document.querySelector('.whatsapp-btn');
+      if (mainWhatsappBtn) {
+        const productName = encodeURIComponent('{{ product.name }}');
+        mainWhatsappBtn.href = `https://wa.me/966${cleanPhoneNumber('{{ product.pharmacies.first.phone }}')}?text=مرحباً، أريد طلب منتج: ${productName}`;
+      }
+      
+      // تحديث روابط الواتساب للصيدليات
+      const pharmacyWhatsappBtns = document.querySelectorAll('.whatsapp-pharmacy-btn');
+      pharmacyWhatsappBtns.forEach(btn => {
+        const pharmacyItem = btn.closest('.pharmacy-item');
+        const pharmacyName = pharmacyItem.querySelector('.pharmacy-name').textContent;
+        const productName = encodeURIComponent('{{ product.name }}');
+        const message = encodeURIComponent(`مرحباً ${pharmacyName}، أستفسر عن منتج: {{ product.name }}`);
+        
+        // افترض أن رقم الهاتف موجود في data attribute أو يمكن استخراجه من الزر
+        btn.href = `https://wa.me/966${cleanPhoneNumber('{{ product.pharmacies.first.phone }}')}?text=${message}`;
+      });
+    });
+  </script>
+</body>
+</html>

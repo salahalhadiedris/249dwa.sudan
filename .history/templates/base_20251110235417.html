@@ -1,0 +1,962 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> متوفر دواء</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --accent-orange: #f97316;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* الهيدر */
+        .header {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 0.75rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s ease;
+        }
+
+        .header.hidden {
+            transform: translateY(-100%);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: background 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .register-pharmacy-btn {
+            background: var(--accent-orange) !important;
+            color: var(--white) !important;
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 0.5rem 1rem !important;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .register-pharmacy-btn:hover {
+            background: #ea580c !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        }
+
+        .register-pharmacy-btn i {
+            animation: pulse 2s infinite;
+        }
+
+        .nav-link i {
+            font-size: 0.8rem;
+        }
+
+        /* زر القائمة المنسدلة للهواتف */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* قسم البحث الرئيسي */
+        .search-hero {
+            background: linear-gradient(rgba(30, 58, 138, 0.8), rgba(59, 130, 246, 0.8)), 
+                        url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 3rem 1rem;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+            margin-top: 70px; /* تعويض عن الهيدر الثابت */
+        }
+
+        .search-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="medical" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23medical)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .search-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .search-container {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .search-box {
+            display: flex;
+            background: var(--white);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            text-align: right;
+            background: transparent;
+        }
+
+        .search-btn {
+            background: var(--accent-orange);
+            color: var(--white);
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #ea580c;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: var(--shadow-lg);
+            margin-top: 0.5rem;
+            display: none;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .suggestion-item:hover {
+            background: #f3f4f6;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .suggestion-info {
+            flex: 1;
+            text-align: right;
+        }
+
+        .suggestion-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .suggestion-category {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .suggestion-price {
+            font-weight: 600;
+            color: var(--accent-orange);
+        }
+
+        /* أزرار التنقل السفلية */
+        .bottom-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .bottom-nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            min-width: 180px;
+            justify-content: center;
+        }
+
+        .bottom-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .bottom-nav-btn i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .bottom-nav-btn:hover i {
+            transform: scale(1.1);
+        }
+
+        .cosmetics-btn {
+            background: linear-gradient(45deg, rgba(236, 72, 153, 0.8), rgba(219, 39, 119, 0.8));
+            border-color: rgba(236, 72, 153, 0.5);
+        }
+
+        .cosmetics-btn:hover {
+            background: linear-gradient(45deg, rgba(236, 72, 153, 0.9), rgba(219, 39, 119, 0.9));
+        }
+
+        .pharmacies-btn {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.8), rgba(5, 150, 105, 0.8));
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .pharmacies-btn:hover {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* قسم تصنيفات الأدوية */
+        .drug-categories {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .category-card {
+            background: var(--white);
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--secondary-blue);
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--secondary-blue), var(--primary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .category-views {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .views-icon {
+            color: var(--accent-orange);
+        }
+
+        /* الفوتر */
+        .footer {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .footer.hidden {
+            transform: translateY(100%);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-copyright {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        /* التصميم المتجاوب */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .nav-link {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .register-pharmacy-btn {
+                padding: 0.4rem 0.8rem !important;
+                font-size: 0.75rem;
+            }
+
+            .search-title {
+                font-size: 2rem;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .category-card {
+                padding: 1rem;
+            }
+
+            .category-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .footer-links {
+                gap: 1rem;
+            }
+
+            .bottom-nav {
+                gap: 1rem;
+                margin-top: 1.5rem;
+            }
+
+            .bottom-nav-btn {
+                padding: 0.8rem 1.5rem;
+                min-width: 150px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-container {
+                justify-content: space-between;
+            }
+
+            .logo-text {
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--primary-blue);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--shadow-lg);
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-link {
+                padding: 0.8rem 1rem;
+                justify-content: center;
+                font-size: 0.9rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .search-hero {
+                padding: 2rem 1rem;
+                margin-top: 60px;
+            }
+
+            .search-title {
+                font-size: 1.5rem;
+            }
+
+            .search-hero-content {
+                padding: 1.5rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .category-name {
+                font-size: 0.9rem;
+            }
+
+            .bottom-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .bottom-nav-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .logo-text {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* تأثيرات إضافية */
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>>
+
+<body>
+    {% include 'partials/_navbar.html' %}
+
+    {% block content %}
+    
+    {% endblock %}
+    {% include 'partials/_footer.html' %}
+    <script>
+        // قاعدة بيانات تصنيفات الأدوية
+        const drugCategories = [
+            {
+                id: 1,
+                name: "ادوية البرد",
+                icon: "fas fa-head-side-cough",
+                views: 107801,
+                color: "#3b82f6"
+            },
+            {
+                id: 2,
+                name: "ادوية القولون",
+                icon: "fas fa-stomach",
+                views: 127041,
+                color: "#10b981"
+            },
+            {
+                id: 3,
+                name: "فيتامينات",
+                icon: "fas fa-capsules",
+                views: 161631,
+                color: "#f59e0b"
+            },
+            {
+                id: 4,
+                name: "للتأخير للرجال",
+                icon: "fas fa-clock",
+                views: 86319,
+                color: "#8b5cf6"
+            },
+            {
+                id: 5,
+                name: "مقوي للرجال",
+                icon: "fas fa-dumbbell",
+                views: 106633,
+                color: "#ef4444"
+            },
+            {
+                id: 6,
+                name: "زيادة التركيز والانتباه",
+                icon: "fas fa-brain",
+                views: 107265,
+                color: "#06b6d4"
+            },
+            {
+                id: 7,
+                name: "الانتفاخ والغازات",
+                icon: "fas fa-wind",
+                views: 69626,
+                color: "#84cc16"
+            },
+            {
+                id: 8,
+                name: "أدوية الضغط",
+                icon: "fas fa-heartbeat",
+                views: 89432,
+                color: "#f97316"
+            },
+            {
+                id: 9,
+                name: "أدوية السكري",
+                icon: "fas fa-syringe",
+                views: 76543,
+                color: "#ec4899"
+            }
+        ];
+
+        // قاعدة بيانات الأدوية للبحث
+        const drugsDatabase = [
+            {
+                id: 1,
+                name: "triacetocort 40mg/ml 1ml vial",
+                arabicName: "ترياسيتوكورت",
+                price: "45",
+                dateAdded: "28-10-2025",
+                views: 697,
+                category: "مضادات الالتهاب",
+                image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&w=100"
+            },
+            {
+                id: 2,
+                name: "litosca 600 mg 30 capsules",
+                arabicName: "ليتوسكا",
+                price: "120",
+                dateAdded: "27-10-2025",
+                views: 543,
+                category: "مكملات غذائية",
+                image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&w=100"
+            },
+            {
+                id: 3,
+                name: "valero syrup 120 ml",
+                arabicName: "ش شراب",
+                price: "35",
+                dateAdded: "26-10-2025",
+                views: 892,
+                category: "أدوية الجهاز الهضمي",
+                image: "https://images.unsplash.com/photo-1576671414122-10de8d937432?ixlib=rb-4.0.3&w=100"
+            },
+            {
+                id: 4,
+                name: "lingabrique 90mg odt 28 tabs",
+                arabicName: "لينجابريك",
+                price: "85",
+                dateAdded: "25-10-2025",
+                views: 456,
+                category: "أدوية القلب",
+                image: "https://images.unsplash.com/photo-1585435557343-3b092031d5ad?ixlib=rb-4.0.3&w=100"
+            },
+            {
+                id: 5,
+                name: "oxinino 20 tabs",
+                arabicName: "أوكسينينو",
+                price: "65",
+                dateAdded: "24-10-2025",
+                views: 723,
+                category: "مضادات حيوية",
+                image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&w=100"
+            },
+            {
+                id: 6,
+                name: "adwipalm tab",
+                arabicName: "أدويبالم",
+                price: "28",
+                dateAdded: "23-10-2025",
+                views: 634,
+                category: "فيتامينات",
+                image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&w=100"
+            },
+            {
+                id: 7,
+                name: "verdanino oral drops 10 ml",
+                arabicName: "فيردانينو",
+                price: "42",
+                dateAdded: "22-10-2025",
+                views: 567,
+                category: "أدوية الأطفال",
+                image: "https://images.unsplash.com/photo-1576671414122-10de8d937432?ixlib=rb-4.0.3&w=100"
+            },
+            {
+                id: 8,
+                name: "ginroy 20 caps",
+                arabicName: "جينروي",
+                price: "95",
+                dateAdded: "21-10-2025",
+                views: 389,
+                category: "مكملات غذائية",
+                image: "https://images.unsplash.com/photo-1585435557343-3b092031d5ad?ixlib=rb-4.0.3&w=100"
+            }
+        ];
+
+        // دالة عرض تصنيفات الأدوية
+        function displayCategories() {
+            const categoriesGrid = document.getElementById('categoriesGrid');
+            categoriesGrid.innerHTML = '';
+
+            drugCategories.forEach(category => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'category-card';
+                categoryCard.onclick = () => filterByCategory(category.name);
+                
+                categoryCard.innerHTML = `
+                    <div class="category-icon" style="background: linear-gradient(45deg, ${category.color}, ${category.color}dd);">
+                        <i class="${category.icon}"></i>
+                    </div>
+                    <div class="category-name">${category.name}</div>
+                    <div class="category-views">
+                        <i class="fas fa-eye views-icon"></i>
+                        ${category.views.toLocaleString()}
+                    </div>
+                `;
+                
+                categoriesGrid.appendChild(categoryCard);
+            });
+        }
+
+        // دالة البحث
+        function handleSearch() {
+            const searchTerm = document.getElementById('mainSearch').value.toLowerCase();
+            const suggestionsDiv = document.getElementById('searchSuggestions');
+            
+            if (searchTerm.length < 2) {
+                suggestionsDiv.style.display = 'none';
+                return;
+            }
+
+            const matches = drugsDatabase.filter(drug => 
+                drug.name.toLowerCase().includes(searchTerm) || 
+                drug.arabicName.toLowerCase().includes(searchTerm) ||
+                drug.category.toLowerCase().includes(searchTerm)
+            );
+
+            if (matches.length > 0) {
+                suggestionsDiv.innerHTML = '';
+                matches.slice(0, 5).forEach(drug => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'suggestion-item';
+                    suggestionItem.onclick = () => selectDrug(drug);
+                    
+                    suggestionItem.innerHTML = `
+                        <img src="${drug.image}" alt="${drug.name}" class="suggestion-image">
+                        <div class="suggestion-info">
+                            <div class="suggestion-name">${drug.name}</div>
+                            <div class="suggestion-category">${drug.arabicName} - ${drug.category}</div>
+                        </div>
+                        <div class="suggestion-price">تفاصيل</div>
+                    `;
+                    
+                    suggestionsDiv.appendChild(suggestionItem);
+                });
+                suggestionsDiv.style.display = 'block';
+            } else {
+                suggestionsDiv.innerHTML = '<div class="suggestion-item" style="text-align: center; color: var(--text-light);">لا توجد نتائج</div>';
+                suggestionsDiv.style.display = 'block';
+            }
+        }
+
+        // دالة اختيار دواء من الاقتراحات
+        function selectDrug(drug) {
+            document.getElementById('mainSearch').value = drug.name;
+            document.getElementById('searchSuggestions').style.display = 'none';
+            // التوجيه لصفحة التفاصيل
+            window.location.href = `details.html?id=${drug.id}`;
+        }
+
+        // دالة إظهار الاقتراحات
+        function showSuggestions() {
+            const searchTerm = document.getElementById('mainSearch').value;
+            if (searchTerm.length >= 2) {
+                handleSearch();
+            }
+        }
+
+        // دالة إخفاء الاقتراحات
+        function hideSuggestions() {
+            setTimeout(() => {
+                document.getElementById('searchSuggestions').style.display = 'none';
+            }, 200);
+        }
+
+        // دالة البحث الرئيسية
+        function performSearch() {
+            const searchTerm = document.getElementById('mainSearch').value;
+            if (searchTerm.trim()) {
+                // التوجيه لصفحة نتائج البحث
+                window.location.href = `search-results.html?q=${encodeURIComponent(searchTerm)}`;
+            }
+        }
+
+        // دالة فلترة الأدوية حسب التصنيف
+        function filterByCategory(categoryName) {
+            // التوجيه لصفحة الأدوية مع فلتر التصنيف
+            window.location.href = `drugs-list.html?category=${encodeURIComponent(categoryName)}`;
+        }
+
+        // دالة تسجيل الصيدلية
+        function registerPharmacy() {
+            const message = "مرحباً، أود تسجيل صيدليتي في متوفر دواء";
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/201158968075?text=${encodedMessage}`, '_blank');
+        }
+
+        // دالة فتح صفحة منتجات التجميل
+        function openCosmetics() {
+            window.location.href = 'cosmo.html';
+        }
+
+        // دالة فتح صفحة الصيدليات
+        function openPharmacies() {
+            window.location.href = 'pharmacies.html';
+        }
+
+        // دالة إخفاء/إظهار الهيدر عند التمرير
+        let lastScrollTop = 0;
+        function handleHeaderVisibility() {
+            const header = document.getElementById('header');
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                // التمرير لأسفل - إخفاء الهيدر
+                header.classList.add('hidden');
+            } else {
+                // التمرير لأعلى - إظهار الهيدر
+                header.classList.remove('hidden');
+            }
+            
+            lastScrollTop = scrollTop;
+        }
+
+        // دالة تبديل القائمة المنسدلة للهواتف
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            displayCategories();
+            
+            // إضافة مستمع حدث للتمرير
+            window.addEventListener('scroll', handleHeaderVisibility);
+            
+            // إضافة مستمع حدث للبحث عند الضغط على Enter
+            document.getElementById('mainSearch').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // إضافة مستمع حدث لزر القائمة المنسدلة
+            document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+        });
+    </script>
+
+</body>

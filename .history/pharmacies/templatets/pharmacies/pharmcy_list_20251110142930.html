@@ -1,0 +1,30 @@
+<!-- templates/products/product_list.html -->
+<h2>المنتجات</h2>
+<ul>
+  {% for product in products %}
+    <li>
+      {{ product.name }} - {{ product.price }} جنيه  
+      | الفئة: {{ product.category.name }}  
+      | متوفر في:
+      {% for ph in product.pharmacies.all %}
+        {{ ph.name }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </li>
+  {% endfor %}
+</ul>
+
+<hr>
+
+<h3>الفئات</h3>
+<ul>
+  {% for cat in categories %}
+    <li>{{ cat.name }}</li>
+  {% endfor %}
+</ul>
+
+<h3>الصيدليات</h3>
+<ul>
+  {% for ph in pharmacies %}
+    <li>{{ ph.name }} - {{ ph.city }}</li>
+  {% endfor %}
+</ul>

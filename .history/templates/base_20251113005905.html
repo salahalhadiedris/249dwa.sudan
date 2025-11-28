@@ -1,0 +1,44 @@
+{% load static %}
+    <!-- الهيدر -->
+    <header class="header" id="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-text">متوفر دواء</div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="nav-links" id="navLinks">
+                <a href="{% url 'home' %}" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    الرئيسية
+                </a>
+                <a href="{% url 'drugs:drugs-list' " class="nav-link">
+                    <i class="fas fa-pills"></i>
+                    الأدوية
+                </a>
+                <a href="{% url 'drugs:pharmacies-list' " class="nav-link">
+                    <i class="fas fa-store"></i>
+                    الصيدليات
+                </a>
+                <a href="{% url 'register-pharmacy' " class="nav-link register-pharmacy-btn">
+                    <i class="fas fa-plus-circle"></i>
+                    سجل صيدليتك
+                </a>
+            </nav>
+        </div>
+    </header>
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- الفوتر -->
+    <footer class="bg-light text-center py-3 mt-5">
+        <p>© 2025 متوفر دواء | جميع الحقوق محفوظة</p>
+    </footer>
+
+    <!-- سكربتات -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

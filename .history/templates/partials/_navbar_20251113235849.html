@@ -1,0 +1,35 @@
+{% load static %}
+    <!-- الهيدر -->
+    <nav class="navbar navbar-expand-1g navbar-dark bg-dark"></nav>
+    <div class=" container-fluid "></div>
+
+
+
+    <header class="header" id="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-text">متوفر دواء</div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="nav-links" id="navLinks">
+                <a href="{% url 'home' %}" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    الرئيسية
+                </a>
+                <a href="{% url 'products' %}" class="nav-link">
+                    <i class="fas fa-pills"></i>
+                    الأدوية
+                </a>
+                <a href="{% url 'pharmacies' %}" class="nav-link">
+                    <i class="fas fa-store"></i>
+                    الصيدليات
+                </a>
+                <a href="{% url 'register-pharmacy' " class="nav-link register-pharmacy-btn">
+                    <i class="fas fa-plus-circle"></i>
+                    سجل صيدليتك
+                </a>
+            </nav>
+        </div>
+    </header>
