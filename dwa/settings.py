@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'True'
 
-ALLOWED_HOSTS = ['*', 'railway.app']
+ALLOWED_HOSTS = ['*', 'railway.app', '249dwa-production.up.railway.app']
 
 
 # Application definition
