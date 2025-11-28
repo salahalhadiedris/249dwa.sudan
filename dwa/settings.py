@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'dwa.wsgi.application'
 if 'DATABASE_URL' in os.environ:
   DATABASES = {
       'default': dj_database_url.config(
-          default=os.getenv('DATABASE_URL'),
+          default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3'),
             conn_max_age=600,
             ssl_require=True
       )
