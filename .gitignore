@@ -27,3 +27,6 @@ media/
 
 # OS files
 .DS_Store
+
+.history
+.vscode/
