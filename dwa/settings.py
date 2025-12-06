@@ -33,8 +33,10 @@ DEBUG = os.getenv('DEBUG', 'False').lower() == 'True'
 
 ALLOWED_HOSTS = ('localhost', '127.0.0.1', '249dwa-production.up.railway.app')
 
-CSRF_TRUSTED_ORIGINS = ('http://localhost,http://249dwa-production.up.railway.app')
-
+if DEBUG:
+    csrf_trusted_origins = ['http://localhost:8000', 'http://127.0.0.1:8000']
+else:
+    csrf_trusted_origins = ['https://249dwa-production.up.railway.app']
 
 # Application definition
 
