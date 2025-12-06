@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'True'
 
-ALLOWED_HOSTS = os.getenv('localhost', '127.0.0.1', '249dwa-production.up.railway.app').split(',')
+ALLOWED_HOSTS = os.getenv('localhost', '127.0.0.1', '249dwa-production.up.railway.app')
 
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost,http://249dwa-production.up.railway.app').split(',')
 
@@ -86,11 +86,10 @@ WSGI_APPLICATION = 'dwa.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASE = os.getenv('DATABASE_URL')
 
-DATABASE = {
-    'default': dj_database_url.parse(DATABASE, conn_max_age=600, ssl_require=True)
-}
+POSTGRES_LOCALLY = True
+if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == True:
+    DATABASE ['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
 
 # Password validation
