@@ -31,9 +31,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'True'
 
-ALLOWED_HOSTS = os.getenv('localhost', '127.0.0.1', '249dwa-production.up.railway.app')
+ALLOWED_HOSTS = ('localhost', '127.0.0.1', '249dwa-production.up.railway.app')
 
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost,http://249dwa-production.up.railway.app').split(',')
+CSRF_TRUSTED_ORIGINS = ('http://localhost,http://249dwa-production.up.railway.app')
 
 
 # Application definition
@@ -86,11 +86,21 @@ WSGI_APPLICATION = 'dwa.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+environment = os.getenv('ENIVRONMENT', 'development')
 
-POSTGRES_LOCALLY = True
-if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == True:
-    DATABASE ['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
+if os.getenv('ENVIRONMENT') == 'production' or os.getenv('POSTGRES_LOCALLY', 'false') == 'True':
+    DATABASES = {
+        'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
+    }
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
