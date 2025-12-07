@@ -1,8 +1,6 @@
-{% extends "base.html" %}
 {% load static %}
 
 {% block content %}
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -58,686 +56,311 @@
             align-items: center;
         }
 
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, var(--accent-orange), #fb923c);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
         .logo-text {
             font-size: 1.5rem;
             font-weight: 700;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: var(--white);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            transition: background 0.3s;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .register-pharmacy-btn {
-            background: var(--accent-orange) !important;
-            color: var(--white) !important;
-            font-weight: 700;
-            border-radius: 25px;
-            padding: 0.6rem 1.2rem !important;
-            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .register-pharmacy-btn:hover {
-            background: #ea580c !important;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
-        }
-
-
-        /* قسم الفلترة */
-        .filter-section {
-            background: var(--white);
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 1200px;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-        }
-
-        .filter-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .filters-container {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .filter-label {
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 0.9rem;
-        }
-
-        .filter-select {
-            padding: 0.8rem 1rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            background: var(--white);
-            font-size: 1rem;
-            text-align: right;
-            cursor: pointer;
-            transition: border-color 0.3s;
-            min-width: 200px;
-        }
-
-        .filter-select:focus {
-            border-color: var(--primary-blue);
-            outline: none;
-        }
-
-        .filter-btn {
+        /* العنوان الأزرق */
+        .page-title {
             background: var(--primary-blue);
             color: var(--white);
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 1.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .filter-btn:hover {
-            background: var(--secondary-blue);
-            transform: translateY(-2px);
+        /* شريط البحث */
+        .search-section {
+            background: var(--white);
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-bottom: 2px solid #dc2626;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            text-align: right;
+            transition: all 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.2rem;
         }
 
         /* قسم الأدوية */
         .drugs-section {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem 2rem;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 2rem;
-            text-align: center;
+            padding: 1.5rem 1rem;
         }
 
         .drugs-list {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .drug-item {
             background: var(--white);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
+            border-radius: 8px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             display: flex;
-            align-items: center;
-            gap: 1.5rem;
+            align-items: flex-start;
+            gap: 1rem;
             transition: all 0.3s ease;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #f3f4f6;
+            cursor: pointer;
         }
 
         .drug-item:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            transform: translateX(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
             border-color: var(--secondary-blue);
         }
 
-        .drug-number {
-            background: var(--primary-blue);
-            color: var(--white);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-
         .drug-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 10px;
-            object-fit: cover;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            flex-shrink: 0;
-        }
-
-        .drug-info {
-            flex: 1;
-            text-align: right;
-        }
-
-        .drug-name-arabic {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .drug-name-english {
-            font-size: 1rem;
-            color: var(--text-light);
-            margin-bottom: 0.5rem;
-            font-style: italic;
-        }
-
-        .drug-strength {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            background: #f3f4f6;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            display: inline-block;
-            margin-bottom: 0.5rem;
-        }
-
-        .drug-price {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #dc2626;
-            margin-bottom: 1rem;
-        }
-
-        .order-btn {
-            background: #25d366;
-            color: var(--white);
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-            margin-bottom: 0.5rem;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .order-btn:hover {
-            background: #128c7e;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-        }
-
-        .details-btn {
-            background: var(--primary-blue);
-            color: var(--white);
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
-            width: 100%;
-            justify-content: center;
-        }
-
-        .details-btn:hover {
-            background: var(--secondary-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
-        }
-
-        .drug-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            min-width: 200px;
-        }
-
-        /* القائمة المنسدلة للصيدليات */
-        .pharmacy-dropdown {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .pharmacy-dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: var(--white);
-            min-width: 100%;
-            box-shadow: var(--shadow-lg);
-            border-radius: 10px;
-            z-index: 1000;
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #e5e7eb;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-        }
-
-        .pharmacy-dropdown-content.show {
-            display: block;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .pharmacy-item {
-            padding: 1rem;
-            cursor: pointer;
-            border-bottom: 1px solid #f3f4f6;
-            transition: background-color 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .pharmacy-item:last-child {
-            border-bottom: none;
-        }
-
-        .pharmacy-item:hover {
-            background-color: #f8fafc;
-        }
-
-        .pharmacy-item-image {
             width: 50px;
             height: 50px;
             border-radius: 8px;
             object-fit: cover;
             flex-shrink: 0;
+            border: 2px solid #e5e7eb;
         }
 
-        .pharmacy-item-info {
+        .drug-content {
             flex: 1;
             text-align: right;
         }
 
-        .pharmacy-item-name {
-            font-weight: 600;
+        .drug-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--secondary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .drug-generic {
+            font-size: 0.95rem;
             color: var(--text-dark);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .drug-commercial {
             font-size: 0.9rem;
-        }
-
-        .pharmacy-item-location {
-            color: var(--text-light);
-            font-size: 0.8rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .pharmacy-item-rating {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            font-size: 0.8rem;
-        }
-
-        .pharmacy-item-rating .stars {
-            color: #fbbf24;
-        }
-
-        .pharmacy-item-rating .rating-text {
-            color: var(--text-light);
-        }
-
-        .pharmacy-item-action {
-            background: #25d366;
-            color: var(--white);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
+            color: #10b981;
             font-weight: 600;
-            transition: all 0.3s;
-            flex-shrink: 0;
+            margin-bottom: 0.4rem;
         }
 
-        .pharmacy-item-action:hover {
-            background: #128c7e;
-            transform: translateY(-1px);
+        .drug-manufacturer {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.4rem;
         }
 
-        .no-pharmacies {
-            padding: 2rem;
+        .drug-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+            min-width: 120px;
+        }
+
+        .drug-price {
+            font-size: 1rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .drug-country {
+            font-size: 0.9rem;
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .no-results {
             text-align: center;
+            padding: 3rem;
             color: var(--text-light);
         }
 
-        .no-pharmacies i {
-            font-size: 2rem;
+        .no-results i {
+            font-size: 3rem;
             margin-bottom: 1rem;
             display: block;
-        }
-
-        .order-btn i {
-            font-size: 1.2rem;
-        }
-
-        /* الفوتر */
-        .footer {
-            background: var(--primary-blue);
-            color: var(--white);
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: var(--white);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            transition: background 0.3s;
-            font-weight: 500;
-        }
-
-        .footer-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-copyright {
-            text-align: center;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
+            color: var(--text-light);
         }
 
         /* التصميم المتجاوب */
         @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .filter-section {
-                padding: 1.5rem;
-                margin: 1rem;
-            }
-
-            .filters-container {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .filter-select {
-                min-width: auto;
+            .page-title {
+                font-size: 1.2rem;
+                padding: 1rem;
             }
 
             .drug-item {
                 flex-direction: column;
-                text-align: center;
                 gap: 1rem;
             }
 
-            .drug-info {
+            .drug-content {
                 text-align: center;
+            }
+
+            .drug-right {
+                align-items: center;
+                width: 100%;
             }
 
             .drug-image {
-                width: 120px;
-                height: 120px;
-            }
-
-            .drug-actions {
-                width: 100%;
-            }
-
-            .order-btn, .details-btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .pharmacy-dropdown-content {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 90%;
-                max-width: 400px;
-                max-height: 70vh;
-            }
-
-            .pharmacy-item {
-                flex-direction: column;
-                text-align: center;
-                gap: 0.5rem;
-            }
-
-            .pharmacy-item-image {
-                width: 60px;
-                height: 60px;
-            }
-
-            .pharmacy-item-info {
-                text-align: center;
+                margin: 0 auto;
             }
         }
-
-        @media (max-width: 480px) {
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            .drug-name-arabic {
-                font-size: 1.1rem;
-            }
-
-            .drug-name-english {
-                font-size: 0.9rem;
-            }
-
-            .drug-price {
-                font-size: 1.1rem;
-            }
-        }
-
     </style>
 </head>
 <body>
-    <!-- الهيدر -->
-    <header class="header">
-        <div class="header-container">
-            <div class="logo-section">
-                <div class="logo-icon">
-                    <i class="fas fa-pills"></i>
-                </div>
-                <div class="logo-text">متوفر دواء</div>
-            </div>
-            <nav class="nav-links">
-                <a href="{% url 'home' %}" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    الرئيسية
-                </a>
-                <a href="{% url 'register-pharmacy' " class="nav-link register-pharmacy-btn">
-                    <i class="fas fa-plus-circle"></i>
-                    سجل صيدليتك
-                </a>
-                <a href="{% url 'login' " class="nav-link">
-                    <i class="fas fa-lock"></i>
-                    دخول
-                </a>
-            </nav>
-        </div>
-    </header>
+    <!-- العنوان الأزرق -->
+    <div class="page-title">
+        جميع الأدوية المسجلة!
+    </div>
 
-    <!-- قسم الفلترة -->
-    <section class="filter-section">
-        <h2 class="filter-title">فلتر الأدوية حسب المدينة والفئة</h2>
-        <form method="get" action="">
-            <div class="filters-container">
-                <div class="filter-group">
-                    <label class="filter-label">المدينة</label>
-                    <select class="filter-select" name="city" id="cityFilter">
-                        <option value="">جميع المدن</option>
-                        {% for city in cities %}
-                            <option value="{{ city }}" {% if city == request.GET.city %}selected{% endif %}>{{ city }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">نوع الدواء</label>
-                    <select class="filter-select" name="category" id="typeFilter">
-                        <option value="">جميع الأنواع</option>
-                        {% for cat in categories %}
-                            <option value="{{ cat.id }}" {% if cat.id|stringformat:"s" == request.GET.category %}selected{% endif %}>{{ cat.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <button type="submit" class="filter-btn">
-                        <i class="fas fa-filter"></i>
-                        فلتر
-                    </button>
-                </div>
-            </div>
-        </form>
-    </section>
+    <!-- شريط البحث -->
+    <div class="search-section">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" 
+                   class="search-input" 
+                   id="searchInput" 
+                   placeholder="ابحث عن دواء (الاسم العلمي، الاسم التجاري، الشركة المصنعة...)" 
+                   oninput="filterDrugs()">
+        </div>
+    </div>
 
     <!-- قسم الأدوية -->
     <section class="drugs-section">
-        <h2 class="section-title">قائمة الأدوية المتوفرة</h2>
         <div class="drugs-list" id="drugsList">
             {% for product in products %}
-                <div class="drug-item">
-                    <div class="drug-number">{{ forloop.counter }}</div>
+                <div class="drug-item" 
+                     data-name="{{ product.name|lower }}" 
+                     data-english="{{ product.name_english|default:''|lower }}"
+                     data-category="{{ product.category.name|default:''|lower }}"
+                     onclick="window.location.href='{% url 'product_detail' product_id=product.id %}'">
                     {% if product.image %}
                         <img src="{{ product.image.url }}" alt="{{ product.name }}" class="drug-image">
+                    {% else %}
+                        <div class="drug-image" style="background: #f3f4f6; display: flex; align-items: center; justify-content: center; color: #9ca3af;">
+                            <i class="fas fa-pills"></i>
+                        </div>
                     {% endif %}
-                    <div class="drug-info">
-                        <div class="drug-name-arabic">{{ product.name }}</div>
+                    <div class="drug-content">
+                        <div class="drug-name">{{ product.name }}</div>
                         {% if product.name_english %}
-                            <div class="drug-name-english">{{ product.name_english }}</div>
+                            <div class="drug-generic">{{ product.name_english }}</div>
                         {% endif %}
-                        {% if product.strength %}
-                            <div class="drug-strength">{{ product.strength }}</div>
-                        {% endif %}
-                        {% if product.price %}
-                            <div class="drug-price">السعر: {{ product.price }} جنيه</div>
+                        {% if product.category %}
+                            <div class="drug-commercial">{{ product.category.name }}</div>
                         {% endif %}
                         {% if product.description %}
-                            <div style="color: var(--text-light); font-size: 0.9rem; margin-top: 0.5rem;">{{ product.description }}</div>
+                            <div class="drug-manufacturer">{{ product.description|truncatewords:15 }}</div>
                         {% endif %}
                     </div>
-                    <div class="drug-actions">
-                        <div class="pharmacy-dropdown">
-                            <button class="order-btn" data-product-id="{{ product.id }}" onclick="togglePharmacyDropdown(this)">
-                                <i class="fab fa-whatsapp"></i>
-                                لطلب الشراء اضغط هنا
-                                <i class="fas fa-chevron-down" style="margin-right: 0.5rem;"></i>
-                            </button>
-                            <div class="pharmacy-dropdown-content" id="pharmacyDropdown{{ product.id }}"></div>
-                        </div>
-                        <button class="details-btn" data-product-id="{{ product.id }}" onclick="viewDrugDetails(this)">
-                            <i class="fas fa-info-circle"></i>
-                            تفاصيل الدواء
-                        </button>
+                    <div class="drug-right">
+                        {% if product.price %}
+                            <div class="drug-price">{{ product.price }} جنيه</div>
+                        {% else %}
+                            <div class="drug-price">MRP/</div>
+                        {% endif %}
+                        <div class="drug-country">مصر</div>
                     </div>
                 </div>
             {% empty %}
-                <div style="text-align: center; padding: 3rem; color: var(--text-light);">
-                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
                     <h3>لا توجد أدوية متوفرة</h3>
-                    <p>جرب تغيير الفلاتر أو المدينة</p>
                 </div>
             {% endfor %}
         </div>
     </section>
 
-    <!-- الفوتر -->
-    <footer class="footer" id="footer">
-        <div class="footer-container">
-            <div class="footer-links">
-                <a href="#" class="footer-link">اتصل بنا</a>
-                <a href="#" class="footer-link">سياسة الخصوصية</a>
-                <a href="#" class="footer-link">شروط الاستخدام</a>
-            </div>
-            <div class="footer-copyright">
-                <p>&copy; 2025 متوفر دواء. جميع الحقوق محفوظة.</p>
-            </div>
-        </div>
-    </footer>
-    
+    <script>
+        function filterDrugs() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const drugItems = document.querySelectorAll('.drug-item');
+            let visibleCount = 0;
+
+            drugItems.forEach(item => {
+                const name = item.getAttribute('data-name') || '';
+                const english = item.getAttribute('data-english') || '';
+                const category = item.getAttribute('data-category') || '';
+                
+                const matches = name.includes(searchTerm) || 
+                              english.includes(searchTerm) || 
+                              category.includes(searchTerm);
+
+                if (matches || searchTerm === '') {
+                    item.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // إظهار رسالة إذا لم توجد نتائج
+            const drugsList = document.getElementById('drugsList');
+            let noResultsMsg = drugsList.querySelector('.no-results-msg');
+            
+            if (visibleCount === 0 && searchTerm !== '') {
+                if (!noResultsMsg) {
+                    noResultsMsg = document.createElement('div');
+                    noResultsMsg.className = 'no-results no-results-msg';
+                    noResultsMsg.innerHTML = `
+                        <i class="fas fa-search"></i>
+                        <h3>لا توجد نتائج للبحث</h3>
+                        <p>جرب البحث بكلمات مختلفة</p>
+                    `;
+                    drugsList.appendChild(noResultsMsg);
+                }
+            } else {
+                if (noResultsMsg) {
+                    noResultsMsg.remove();
+                }
+            }
+        }
+
+        // البحث عند الضغط على Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterDrugs();
+            }
+        });
+    </script>
+</body>
+</html>
 {% endblock %}

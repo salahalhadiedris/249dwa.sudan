@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Pharmacy
 
-def pharmacy_list(request):
+def pharmacies(request):
     pharmacies = Pharmacy.objects.all()
-    return render(request, 'pharmacies/pharmacy_list.html', {'pharmacies': pharmacies})
+    return render(request, 'pharmacies/pharmacies.html', {'pharmacies': pharmacies})

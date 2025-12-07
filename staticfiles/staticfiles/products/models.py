@@ -22,7 +22,7 @@ class Product(models.Model):
     class Meta:
         verbose_name = "منتج"
         verbose_name_plural = "المنتجات"
-        ordering = ['-created_at']
+        ordering = ['name']
     
     def __str__(self):
         return self.name

@@ -1,0 +1,35 @@
+{% load static %}
+<header class="header" id="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-text">متوفر دواء</div>
+            </div>
+            <button class="
+                <i 
+                {% if request.path == '/' %}class="nav-item active"%}
+                {% else %}class="nav-item"{% endif %}></i>
+            </button>
+            <nav class="nav-links" id="navLinks">
+                <a href="{% url 'home'%}" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    الرئيسية
+                </a>
+                <a href="{% url 'product_list'%}" class="nav-link">
+                    <i class="fas fa-pills"></i>
+                    الأدوية
+                </a>
+                <a href="{% url 'cosmo'%}" class="nav-link">
+                    <i class="fas fa-spa"></i>
+                    منتجات التجميل
+                </a>
+                <a href="{% url 'pharmacy_list'%}" class="nav-link">
+                    <i class="fas fa-store"></i>
+                    الصيدليات
+                </a>
+                <a href="{% url 'sigin'%}" class="nav-link">
+                    <i class="fas fa-lock"></i>
+                    دخول
+                </a>
+            </nav>
+        </div>
+    </header>

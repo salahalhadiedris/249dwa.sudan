@@ -29,14 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'True'
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ('localhost', '127.0.0.1', '249dwa-production.up.railway.app')
-
-if DEBUG:
-    csrf_trusted_origins = ['http://localhost:8000', 'http://127.0.0.1:8000']
-else:
-    csrf_trusted_origins = ['https://249dwa-production.up.railway.app']
+ALLOWED_HOSTS = ('249dwa.pythonanywhere.com', '127.0.0.1')
 
 # Application definition
 
@@ -90,19 +85,17 @@ WSGI_APPLICATION = 'dwa.wsgi.application'
 
 environment = os.getenv('ENIVRONMENT', 'development')
 
-
-if os.getenv('ENVIRONMENT') == 'production' or os.getenv('POSTGRES_LOCALLY', 'false') == 'True':
-    DATABASES = {
-        'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
-
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
-        }
-    }
+}
+    
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

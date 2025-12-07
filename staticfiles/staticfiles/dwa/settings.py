@@ -10,7 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from datetime import timedelta
+import dj_database_url
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +26,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-290nb%evht)5f4vc29%zaw*1p0zyoqi)v_4@u%&-@s0==ho@0a'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ('localhost', '127.0.0.1', '249dwa-production.up.railway.app')
 
+if DEBUG:
+    csrf_trusted_origins = ['http://localhost:8000', 'http://127.0.0.1:8000']
+else:
+    csrf_trusted_origins = ['https://249dwa-production.up.railway.app']
 
 # Application definition
 
@@ -40,7 +50,9 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'products.apps.ProductsConfig',
     'pharmacies.apps.PharmaciesConfig',
-    'categories.apps.CategoriesConfig'
+    'categories.apps.CategoriesConfig',
+    'users.apps.UsersConfig',
+    'cities.apps.CitiesConfig',
 ]
 
 MIDDLEWARE = [
@@ -76,17 +88,21 @@ WSGI_APPLICATION = 'dwa.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dwa2db',
-        'USER': 'postgres',
-        'PASSWORD': 'Salahalh2016',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+environment = os.getenv('ENIVRONMENT', 'development')
 
+
+if os.getenv('ENVIRONMENT') == 'production' or os.getenv('POSTGRES_LOCALLY', 'false') == 'True':
+    DATABASES = {
+        'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
+    }
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -121,12 +137,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = 'static/'
+DISBLE_COLLECTSTATIC = 1
+STATIC_URL = '/static/'
 # Media files
 import os
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'media')
 
 
 # Default primary key field type
