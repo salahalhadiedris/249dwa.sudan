@@ -1,0 +1,142 @@
+// قاعدة بيانات الصيدليات - محدثة بالصور الجديدة
+const pharmaciesDatabase = [
+    {
+        id: 1,
+        name: "صيدلية ملاح الهادي",
+        location: "القاهرة - المعادي",
+        phone: "+201158968075",
+        whatsapp: "+201158968075",
+        image: "images/pharmacies/pharmacy1.jpg",
+        featured: true,
+        rating: 4.5
+    },
+    {
+        id: 2,
+        name: "صيدلية أمة",
+        location: "الجيزة - الدقي", 
+        phone: "+201158968075",
+        whatsapp: "+201158968075",
+        image: "images/pharmacies/pharmacy2.jpg", // صورتك اللي اشتغلت
+        featured: true,
+        rating: 4.2
+    },
+    {
+        id: 3,
+        name: "صيدلية النور",
+        location: "الإسكندرية - سموحة",
+        phone: "+201234567890",
+        whatsapp: "+201234567890",
+        image: "images/pharmacies/pharmacy3.jpg",
+        featured: true,
+        rating: 4.8
+    }
+];
+
+// قاعدة بيانات الأدوية - محدثة
+const drugDatabase = {
+    "باراسيتامول": {
+        name: "باراسيتامول",
+        description: "مسكن للألم وخافض للحرارة",
+        price: "15 جنيه",
+        image: "images/drugs/paracetamol.jpg",
+        pharmacies: [1, 2, 3],
+        category: "مسكنات"
+    },
+    "فيتامين سي": {
+        name: "فيتامين سي", 
+        description: "مكمل غذائي لمقاومة الأمراض",
+        price: "30 جنيه",
+        image: "images/drugs/vitamin-c.jpg",
+        pharmacies: [1, 2],
+        category: "فيتامينات"
+    },
+    "بروفين": {
+        name: "بروفين",
+        description: "مسكن للآلام ومضاد للالتهابات", 
+        price: "25 جنيه",
+        image: "images/drugs/ibuprofen.jpg",
+        pharmacies: [2, 3],
+        category: "مسكنات"
+    }
+};
+// دالة لعرض جميع الصيدليات
+function displayPharmacies() {
+    const pharmaciesContainer = document.getElementById('pharmacies-container');
+    
+    if (!pharmaciesContainer) return;
+    
+    pharmaciesContainer.innerHTML = '';
+    
+    pharmaciesDatabase.forEach(pharmacy => {
+        const pharmacyCard = `
+            <div class="pharmacy-card ${pharmacy.featured ? 'featured-pharmacy' : ''}">
+                ${pharmacy.featured ? '<div class="featured-badge">⭐ مميزة</div>' : ''}
+                
+                <img src="${pharmacy.image}" 
+                     alt="${pharmacy.name}"
+                     class="pharmacy-image"
+                     onerror="this.src='images/default.jpg'">
+                
+                <div class="pharmacy-header">
+                    <div class="pharmacy-name">${pharmacy.name}</div>
+                    <div class="pharmacy-rating">⭐ ${pharmacy.rating}</div>
+                </div>
+                
+                <div class="pharmacy-location">
+                    📍 ${pharmacy.location}
+                </div>
+                
+                <div class="pharmacy-contacts">
+                    <button class="contact-btn phone-btn" onclick="callPharmacy('${pharmacy.phone}')">
+                        📞 ${pharmacy.phone}
+                    </button>
+                    <button class="contact-btn whatsapp-btn" onclick="openWhatsApp('${pharmacy.whatsapp}')">
+                        💬 واتساب
+                    </button>
+                </div>
+            </div>
+        `;
+        pharmaciesContainer.innerHTML += pharmacyCard;
+    });
+}
+
+// دالة لعرض الصيدليات في صفحة الدواء
+function displayPharmaciesForDrug(pharmacyIds) {
+    return pharmacyIds.map(id => {
+        const pharmacy = pharmaciesDatabase.find(p => p.id === id);
+        if (!pharmacy) return '';
+        
+        return `
+            <div class="pharmacy-item">
+                <img src="${pharmacy.image}" 
+                     alt="${pharmacy.name}"
+                     class="pharmacy-thumb"
+                     onerror="this.src='images/default.jpg'">
+                <div class="pharmacy-info">
+                    <strong>${pharmacy.name}</strong>
+                    <p>📍 ${pharmacy.location}</p>
+                    <p>⭐ التقييم: ${pharmacy.rating}</p>
+                    <div class="drug-contacts">
+                        <a href="tel:${pharmacy.phone}" class="contact-link">📞 اتصل</a>
+                        <a href="https://wa.me/${pharmacy.whatsapp" target="_blank" class="contact-link">💬 واتساب</a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// دوال الاتصال
+function callPharmacy(phoneNumber) {
+    window.location.href = `tel:${phoneNumber}`;
+}
+
+function openWhatsApp(whatsappNumber) {
+    window.open(`https://wa.me/${whatsappNumber}`, '_blank');
+}
+
+// تشغيل عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', function() {
+    displayPharmacies();
+    displayDrugs();
+});

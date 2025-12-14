@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
-from datetime import timedelta
 import dj_database_url
 from dotenv import load_dotenv
 
@@ -29,14 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'True'
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ('localhost', '127.0.0.1', '249dwa-production.up.railway.app')
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".railway.app"]
 
-if DEBUG:
-    csrf_trusted_origins = ['http://localhost:8000', 'http://127.0.0.1:8000']
-else:
-    csrf_trusted_origins = ['https://249dwa-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
 
 # Application definition
 
@@ -88,21 +84,12 @@ WSGI_APPLICATION = 'dwa.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-environment = os.getenv('ENIVRONMENT', 'development')
-
-
-if os.getenv('ENVIRONMENT') == 'production' or os.getenv('POSTGRES_LOCALLY', 'false') == 'True':
-    DATABASES = {
-        'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
-    }
-
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
-        }
-    }
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL')
+    )
+}
+    
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -140,7 +127,7 @@ USE_TZ = True
 DISBLE_COLLECTSTATIC = 1
 STATIC_URL = '/static/'
 # Media files
-import os
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'media')
 

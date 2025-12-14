@@ -1,1 +1,1 @@
-web: gunicorn dwa.wsgi --bind 0.0.0.0:$PORT
+web: gunicorn dwa.wsgi:application
