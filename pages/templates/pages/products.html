@@ -145,15 +145,6 @@
             border-color: var(--secondary-blue);
         }
 
-        .drug-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            object-fit: cover;
-            flex-shrink: 0;
-            border: 2px solid #e5e7eb;
-        }
-
         .drug-content {
             flex: 1;
             text-align: right;
@@ -172,37 +163,12 @@
             margin-bottom: 0.4rem;
         }
 
-        .drug-commercial {
-            font-size: 0.9rem;
-            color: #10b981;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-        }
-
-        .drug-manufacturer {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 0.4rem;
-        }
-
         .drug-right {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
             gap: 0.5rem;
             min-width: 120px;
-        }
-
-        .drug-price {
-            font-size: 1rem;
-            color: var(--text-dark);
-            font-weight: 600;
-        }
-
-        .drug-country {
-            font-size: 0.9rem;
-            color: #dc2626;
-            font-weight: 600;
         }
 
         .no-results {
@@ -231,16 +197,12 @@
             }
 
             .drug-content {
-                text-align: center;
+                text-align: left;
             }
 
             .drug-right {
-                align-items: center;
+                align-items: left;
                 width: 100%;
-            }
-
-            .drug-image {
-                margin: 0 auto;
             }
         }
     </style>
@@ -272,13 +234,24 @@
                      data-english="{{ product.name_english|default:''|lower }}"
                      data-category="{{ product.category.name|default:''|lower }}"
                      onclick="window.location.href='{% url 'product_detail' product_id=product.id %}'">
-                   
                     <div class="drug-content">
                         <div class="drug-name">{{ product.name }}</div>
                         {% if product.name_english %}
                             <div class="drug-generic">{{ product.name_english }}</div>
                         {% endif %}
-                       
+                        {% if product.category %}
+                            <div class="drug-commercial">{{ product.category.name }}</div>
+                        {% endif %}
+                        {% if product.description %}
+                            <div class="drug-manufacturer">{{ product.description|truncatewords:15 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="drug-right">
+                        {% if product.price %}
+                            <div class="drug-price">{{ product.price }} جنيه</div>
+                        {% else %}
+                            <div class="drug-price">MRP/</div>
+                        {% endif %}
             {% empty %}
                 <div class="no-results">
                     <i class="fas fa-search"></i>
