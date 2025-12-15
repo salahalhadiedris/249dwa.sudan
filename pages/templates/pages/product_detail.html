@@ -202,10 +202,10 @@
     <tr><td>الاسم العلمي</td><td>{{ product.name_english }}</td></tr>
     {% endif %}
     {% if product.description %}
-    <tr><td>الاستخدام</td><td>{{ product.description|truncatewords:30 }}</td></tr>
+    <tr><td>الاستخدام</td><td>{{ product.description|truncatewords:1000 }}</td></tr>
     {% endif %}
     {% if product.strength %}
-    <tr><td>التراكيز</td><td>{{ product.strength }}</td></tr>
+    <tr><td>التركيز</td><td>{{ product.strength }}</td></tr>
     {% endif %}
     {% if product.category %}
     <tr><td>الفئة</td><td>{{ product.category.name }}</td></tr>

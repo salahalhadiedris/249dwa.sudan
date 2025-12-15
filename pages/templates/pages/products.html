@@ -272,34 +272,13 @@
                      data-english="{{ product.name_english|default:''|lower }}"
                      data-category="{{ product.category.name|default:''|lower }}"
                      onclick="window.location.href='{% url 'product_detail' product_id=product.id %}'">
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="drug-image">
-                    {% else %}
-                        <div class="drug-image" style="background: #f3f4f6; display: flex; align-items: center; justify-content: center; color: #9ca3af;">
-                            <i class="fas fa-pills"></i>
-                        </div>
-                    {% endif %}
+                   
                     <div class="drug-content">
                         <div class="drug-name">{{ product.name }}</div>
                         {% if product.name_english %}
                             <div class="drug-generic">{{ product.name_english }}</div>
                         {% endif %}
-                        {% if product.category %}
-                            <div class="drug-commercial">{{ product.category.name }}</div>
-                        {% endif %}
-                        {% if product.description %}
-                            <div class="drug-manufacturer">{{ product.description|truncatewords:15 }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="drug-right">
-                        {% if product.price %}
-                            <div class="drug-price">{{ product.price }} جنيه</div>
-                        {% else %}
-                            <div class="drug-price">MRP/</div>
-                        {% endif %}
-                        <div class="drug-country">مصر</div>
-                    </div>
-                </div>
+                       
             {% empty %}
                 <div class="no-results">
                     <i class="fas fa-search"></i>
