@@ -1,38 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <title>الصفحة الرئيسية</title>
-</head>
-<body>
-    <h1>مرحباً بيك في موقعنا 🎉</h1>
-    <p>دي الصفحة الرئيسية للموقع.</p>
-
-
-    <!-- في pages/home.html -->
-
-
-<!-- قسم الصيدليات باستخدام template جاهز -->
-<section class="pharmacies-section">
-    <h2>أحدث الصيدليات</h2>
-    {% for pharmacy in pharmacies %}
-        {% include 'pharmacies/pharmacy_list' with pharmacy=pharmacy %}
-    {% endfor %}
-</section>
-
-<!-- قسم المنتجات باستخدام template جاهز -->
-<section class="products-section">
-    <h2>منتجات مميزة</h2>
-    {% for product in featured_products %}
-        {% include 'products/product_list' with product=product %}
-    {% endfor %}
-</section>
-
-
-    <nav>
-        <a href="/">الرئيسية</a> |
-        <a href="/about/">من نحن</a> |
-        <a href="/contact/">تواصل معنا</a>
-    </nav>
-</body>
-</html>
